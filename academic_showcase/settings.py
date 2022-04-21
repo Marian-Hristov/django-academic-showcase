@@ -76,12 +76,12 @@ WSGI_APPLICATION = 'academic_showcase.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': "academic-showcase-db",
         'USER': "academy-admin",
         'PASSWORD': os.environ['ADBPWD'],
         'HOST': 'localhost',
-        'PORT': '5433',
+        'PORT': '5432',
     }
 }
 

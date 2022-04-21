@@ -1,4 +1,4 @@
--- DROP DATABASE IF EXISTS"academic-showcase-db";
+DROP DATABASE IF EXISTS "academic-showcase-db";
 
 CREATE DATABASE "academic-showcase-db"
     WITH 
@@ -13,8 +13,6 @@ COMMENT ON DATABASE "academic-showcase-db"
     IS 'Database for academic showcase app';
 
 GRANT ALL ON DATABASE "academic-showcase-db" TO postgres;
-
-GRANT ALL ON DATABASE "academic-showcase-db" TO "academy-admin";
 
 GRANT TEMPORARY, CONNECT ON DATABASE "academic-showcase-db" TO PUBLIC;
 
