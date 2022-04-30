@@ -1,7 +1,6 @@
 from tkinter import Image
 from django.contrib import admin
-from user_management.models import Profile, ImageFile
+from user_management.models import Profile
 
 # Register your models here.
 admin.site.register(Profile)
-admin.site.register(ImageFile)
