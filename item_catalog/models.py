@@ -1,5 +1,3 @@
-from operator import mod
-from tkinter import CASCADE
 from django.db import models
 from django.forms import ValidationError
 
@@ -25,7 +23,10 @@ class ImageFile(models.Model):
     image_data = models.BinaryField(null=True,blank=True)
 
 class Profile(models.Model):
-    name = models.CharField() # placeholder so i can profile
+    name = models.CharField(max_length=30) # placeholder so i can use profile
+
+    def __str__(self) -> str:
+        return self.name
 
 class Project(models.Model):
     name = models.CharField(max_length=75)
@@ -38,52 +39,70 @@ class Project(models.Model):
     creation_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(default=one_week_hence,validators=[due_date_validation])
     user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, null=False, blank=False)
-    # image = models.BinaryField(blan=True, null=True, editable=True)
 
     def __str__(self) -> str:
         return self.name
 
 
-class CommentSection(models.Model):
-    __comments = models.ManyToManyField() # TODO one to many field
-    parent = None
+class Post(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100,validators=[empty_string_validation])
+    flagged = models.BooleanField(default=False)
+    comments = None
 
-    def validate_parent(parent):
-        if isinstance(parent, CommentSection) or isinstance(parent, Post):
-            return True
-        return False
-
-    def __init__(self, parent):
-        if self.validate_parent(parent):
-            self.parent = parent
-        else:
-            raise TypeError("Accepted parent of CommentSection type: Post, CommentSection")
-
-    # returns an list of comment_sections
-    def get_children(self):
-        return None
-
-    # returns a list of comments
     def get_comments(self):
-        return self.comments
+        return self.comments.filter(parent=None)
 
-    # returns the parent, either post or comment_section
-    def get_parent(self):
-        return self.parent
+    def __str__(self) -> str:
+        return self.title
 
 
 class Comment(models.Model):
     creation_date = models.DateField(auto_now_add=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    body = models.CharField(max_length=300)
-    parent = models.ForeignKey(CommentSection, on_delete=models.CASCADE)
+    body = models.TextField(max_length=500,null=False,blank=False,validators=[empty_string_validation])
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"Comment from {self.user} at {self.creation_date}: {self.body[0:5]}..." 
 
+    def get_comments(self):
+        return Comment.objects.filter(parent=self)
 
-class Post(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100,validators=[empty_string_validation])
-    flagged = models.BooleanField()
-    comment_section = models.ManyToOneRel()  # TODO: one to many field
+# class Commentable(models.Model):
+
+#     # returns an list of comment_sections
+#     def get_children(self):
+#         return None #TODO get children where id is equal to this objects id, (Marian, 04-26)
+#                         # TODO maybe this should be in views? (Marian, 04-26)
+
+
+# class CommentSection(Commentable):
+#     parent = models.ForeignKey(Commentable, on_delete=models.CASCADE, related_name='+')
+
+#     # validation for parent type
+#     def validate_parent(parent):
+#         if isinstance(Commentable): # TODO: do we need this? (Marian, 04-27)
+#             return True
+#         return False
+
+#     def __init__(self, parent):
+#         if self.validate_parent(parent):
+#             self.parent = parent
+#         else:
+#             raise TypeError("Accepted parent of CommentSection type: Post, CommentSection")
+
+#     # returns the parent, either post or comment_section
+#     def get_parent(self):
+#         return self.parent
+
+
+# class Comment(models.Model):
+#     creation_date = models.DateField(auto_now_add=True)
+#     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+#     body = models.CharField(max_length=300)
+#     parent = models.ForeignKey(CommentSection, on_delete=models.CASCADE)
+
+#     def __str__(self) -> str:
+#         return f"Comment from {self.user} at {self.creation_date}: {self.body[0:5]}..." 
