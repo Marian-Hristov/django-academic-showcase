@@ -2,7 +2,9 @@
 {% block content %}
     {% for post in posts %}
         <div>
-            {{ post.title }}
+            <a href="{% url 'post' post.id %}">
+                {{ post.title }}
+            </a> 
         </div>
     {% empty %}
     <h4>No posts!</h4>
