@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import User
 import base64
 import os
 
@@ -11,9 +11,10 @@ def get_def_avatar():
         return base64.b64encode(img_file.read())
 
 class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=254)
     email_addr = models.EmailField(max_length=254, unique=True)
     avatar = models.BinaryField(default=get_def_avatar)
 
     def __str__(self):
-        return str(self.avatar)
+        return str(self.name)
