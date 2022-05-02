@@ -10,19 +10,20 @@
 }
 
 .content {
-    margin-top: 1rem;
     display: inherit;
     flex-direction: row;
     justify-content: start;
     min-width: 100%;
     width: 100%;
     height: 100%;
-    flex-grow: 1;
     overflow: hidden;
+    padding-top: 1rem;
+    flex-grow: 1;
 }
 
 .personal-projects {
     width: 35%;
+    overflow-y: auto;
 }
 
 .posts-container {
@@ -42,10 +43,12 @@
     padding: 1.5rem 2rem 1.5rem 2rem;
     cursor: pointer;
     margin: 1rem 0 1rem 0;
+    height: min-content;
 }
 
 .post-main-container:first-child {
     margin-top: 0;
+    margin-bottom: 0;
 }
 
 .post-main-container:last-child {

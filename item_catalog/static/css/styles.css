@@ -25,23 +25,23 @@ body{
     overflow: hidden;
 }
 
-header {
-    width: 100%;
-}
-
-.header-container{ 
+.header-container{
+    width: 100%; 
     display: flex;
     flex-flow: row wrap;
-    justify-content: center;
+    justify-content: flex-start;
     background: white;
     font-size: 2rem;
     border-bottom: 2px solid #BABAC1;
     border-radius: 10px;
+    height: auto;
+    padding: 1.5rem;
+    overflow: visible;
 }
 
 .logo-container {
-    padding: 1.5rem;
     align-self: flex-start;
+    padding: 1rem;
 }
 
 .logo {
@@ -96,7 +96,8 @@ header {
 }
 
 .options {
-    max-width: 50%;
+    padding: 1rem;
+    min-width: 50%;
     flex-grow: 1;
     display: inherit;
 }
