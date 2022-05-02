@@ -35,7 +35,7 @@ body{
     border-bottom: 2px solid #BABAC1;
     border-radius: 10px;
     height: auto;
-    padding: 1.5rem;
+    /* padding: 1rem; */
     overflow: visible;
 }
 
