@@ -15,4 +15,4 @@ class Profile(models.Model):
     avatar = models.BinaryField(default=get_def_avatar)
 
     def __str__(self):
-        return str(self.name)
+        return str(self.user.username)

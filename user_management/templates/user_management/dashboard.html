@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Hello, {{user.username|default:'Guest'}}!
+Hello, {{Profile.user.first_name|default:'Guest'}}!
 
 <br/> <br/>
 
 <img style='display:block; width:100px;height:100px;' id='base64image'
-       src="data:image/jpg;base64, {{ user.avatar }}"/>
+       src="data:image/jpg;base64, {{ Profile.avatar }}"/>
 
 <br/><br/>
 <div>
