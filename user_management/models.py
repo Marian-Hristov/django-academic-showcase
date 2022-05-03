@@ -12,8 +12,6 @@ def get_def_avatar():
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=254)
-    email_addr = models.EmailField(max_length=254, unique=True)
     avatar = models.BinaryField(default=get_def_avatar)
 
     def __str__(self):

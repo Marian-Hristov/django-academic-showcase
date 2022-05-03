@@ -3,6 +3,11 @@
 {% block content %}
 Hello, {{user.username|default:'Guest'}}!
 
+<br/> <br/>
+
+<img style='display:block; width:100px;height:100px;' id='base64image'
+       src="data:image/jpg;base64, {{ user.avatar }}"/>
+
 <br/><br/>
 <div>
     {% if user.is_authenticated %}

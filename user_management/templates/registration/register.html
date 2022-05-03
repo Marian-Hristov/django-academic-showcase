@@ -6,7 +6,7 @@
 <br/><br/>
 
 <div>
-    <form method='POST'>
+    <form enctype='multipart/form-data' method='POST'>
         {% csrf_token %}
         {{ form.as_p }}
         <button> Register </button>
