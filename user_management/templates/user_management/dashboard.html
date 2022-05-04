@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Hello, {{Profile.user.first_name|default:'Guest'}}!
+{% if user.is_authenticated %}
+    Hello, {{Profile.user.first_name | default:user.username}}!
 
-<br/> <br/>
-
-<img style='display:block; width:100px;height:100px;' id='base64image'
+    <img style='display:block; width:100px;height:100px;' id='base64image'
        src="data:image/jpg;base64, {{ Profile.avatar }}"/>
+{%else%}
+    Hello, Guest!
+{%endif%}
+<br/> <br/>
 
 <br/><br/>
 <div>

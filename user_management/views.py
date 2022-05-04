@@ -4,7 +4,8 @@ from django.shortcuts import redirect, render
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from .models import Profile, User
+from .models import Profile, User, get_def_avatar
+
 
 from user_management.models import Profile
 from .forms import ProfileCreationForm
@@ -21,19 +22,27 @@ from django.views.generic import TemplateView
 #         return context
 
 def get_profile(inp_user):
-    print(Profile.objects.all().filter(user_id=inp_user.id))
     return Profile.objects.all().filter(user_id=inp_user.id)
 
 def dashboard(request):
-    context = {'Profile': None, 'User': User.objects.all().filter(username=request.user).first()}
-    print(context['User'])
-    if len(get_profile(context['User'])) == 0:
-        pass
+    if request.user.is_authenticated:
+        context = {'Profile': None, 'User': User.objects.all().filter(username=request.user).first()}
+        if len(get_profile(context['User'])) == 0:
+            new_profile = Profile(
+                user = User.objects.all().filter(username=request.user).first()
+            )
+            new_profile.save()
+
+            new_profile.avatar = bytes(new_profile.avatar).decode()
+
+            context['Profile'] = new_profile
+        else:
+            profile = get_profile(context['User'])[0]
+            profile.avatar = bytes(profile.avatar).decode()
+            context['Profile'] = profile
+        return render(request, 'user_management/dashboard.html', context=context)
     else:
-        profile = get_profile(context['User'])[0]
-        profile.avatar = bytes(profile.avatar).decode()
-        context['Profile'] = profile
-    return render(request, 'user_management/dashboard.html', context=context)
+        return render(request, 'user_management/dashboard.html')
 
 
 
