@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/post.css' %}">
+{% endblock extrahead %}
+{% block content %}
+<div class="post">
+    <div class="title-container">
+        <h1>{{ object.title }}</h1>
+    </div>
+    <div class="project-info">
+        <h2>Project Info</h2>
+            <div class="project-info-attr">
+                <p class="attr-name">Name:</p>
+                <p class="attr-value">{{ object.project.name }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Type:</p>
+                <p class="attr-value">{{ object.project.type }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Field:</p>
+                <p class="attr-value">{{ object.project.field }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Keywords:</p>
+                <p class="attr-value">{{ object.project.keywords }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Description:</p>
+                <p class="attr-value">{{ object.project.description }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Status:</p>
+                <p class="attr-value">{{ object.project.status }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Created:</p>
+                <p class="attr-value">{{ object.project.creation_date }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Due:</p>
+                <p class="attr-value">{{ object.project.due_date }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">By:</p>
+                <p class="attr-value">{{ object.project.user.name }}</p>
+            </div>
+            <div class="project-info-attr">
+                <p class="attr-name">Likes:</p>
+                <p class="attr-value">{{ object.get_number_of_likes }}</p>
+            </div>
+    </div>
+    <div class="comment-section-container">
+        {% for comment in object.comments.all %}
+            <div class="comment-container">
+                <div class="comment-info">
+                    <h4>{{ comment.user }}</h4>
+                    <h6>{{ comment.creation_date }}</h6>
+                </div>
+                <div class="comment-body">
+                    <p>{{ comment.body }}</p>
+                </div>
+            </div>
+        {% empty %}
+        No comments!
+        {% endfor %}
+    </div>
+    <div class="add-comment-container">
+        <form action="" method="post">
+            <textarea name="add-comment-input" id="add-comment-input" cols="30" rows="5"></textarea>
+            <input type="submit" value="Comment">
+        </form>
+    </div>
+</div>
+{% endblock content %}
