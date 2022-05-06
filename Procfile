@@ -1,1 +1,1 @@
-web: gunicorn acamic_showcase.wsgi
+web: gunicorn academic_showcase.wsgi
