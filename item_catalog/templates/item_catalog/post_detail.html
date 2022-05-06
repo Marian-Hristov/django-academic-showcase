@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/post.css' %}">
+{% endblock extrahead %}
+{% block content %}
+<div class="post">
+    <div class="title-container">
+        <h1>{{ object.title }}</h1>
+    </div>
+    <div class="project-info">
+        <h2>Project Info</h2>
+            <p><b>Name:</b> {{ object.project.name }}</p>
+            <p>Type: {{ object.project.type }}</p>
+            <p>Field: {{ object.project.field }}</p>
+            <p>Keywords: {{ object.project.keywords }}</p>
+            <p>Description: {{ object.project.description }}</p>
+            <p>Status: {{ object.project.status }}</p>
+            <p>Created: {{ object.project.creation_date }}</p>
+            <p>Due: {{ object.project.due_date }}</p>
+            <p>By: {{ object.project.user.name }}</p>
+            <p>Likes: {{ object.get_number_of_likes }}</p>
+    </div>
+    <div class="comment-section-container">
+        {% for comment in object.comments.all %}
+            <div class="comment-container">
+                <div class="comment-info">
+                    <h4>{{ comment.user }}</h4>
+                    <h6>{{ comment.creation_date }}</h6>
+                </div>
+                <div class="comment-body">
+                    <p>{{ comment.body }}</p>
+                </div>
+            <div>
+        {% empty %}
+        No comments!
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

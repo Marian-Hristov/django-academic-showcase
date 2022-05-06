@@ -8,25 +8,30 @@ def one_week_hence():
         from django.utils import timezone
         return timezone.now() + timezone.timedelta(weeks=8)
 
+
 def due_date_validation(due_date):
     from django.core.exceptions import ValidationError
     from django.utils import timezone
     if due_date < timezone.now().date(): 
         raise ValidationError("Due date cannot be set as before today")
 
+
 def empty_string_validation(string: str):
     if len(string) < 1:
         raise ValidationError("Post title cannot be empty")
 
+
 class ImageFile(models.Model):
     image = models.FileField()
     image_data = models.BinaryField(null=True,blank=True)
+
 
 class Profile(models.Model):
     name = models.CharField(max_length=30) # placeholder so i can use profile
 
     def __str__(self) -> str:
         return self.name
+
 
 class Project(models.Model):
     name = models.CharField(max_length=75)
@@ -47,11 +52,10 @@ class Project(models.Model):
 class Post(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=100,validators=[empty_string_validation])
-    flagged = models.BooleanField(default=False)
-    comments = None
+    likes = models.ManyToManyField(Profile, related_name="post_like")
 
-    def get_comments(self):
-        return self.comments.filter(parent=None)
+    def get_number_of_likes(self):
+        return self.likes.count()
 
     def __str__(self) -> str:
         return self.title
@@ -62,13 +66,13 @@ class Comment(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     body = models.TextField(max_length=500,null=False,blank=False,validators=[empty_string_validation])
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
-    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"Comment from {self.user} at {self.creation_date}: {self.body[0:5]}..." 
 
     def get_comments(self):
         return Comment.objects.filter(parent=self)
+
 
 # class Commentable(models.Model):
 

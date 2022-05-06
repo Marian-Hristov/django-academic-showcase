@@ -8,15 +8,9 @@ from item_catalog.models import Post
 
 # Create your views here.
 
-def post(request, post_id):
-    post = Post.objects.get(id=post_id)
-    comments = post.get_comments()
-    template = loader.get_template('item_catalog/post.html')
-    context = {
-        'post': post,
-        # 'comments': comments
-    }
-    return HttpResponse(template.render(context, request))
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'item_catalog/post_detail.html'
 
 def index(request):
     items = Post.objects.filter()
