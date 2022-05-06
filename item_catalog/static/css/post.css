@@ -51,7 +51,7 @@ body {
 .comment-info {
     display: inherit;
     flex-flow: row;
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 .comment-info h4 {
