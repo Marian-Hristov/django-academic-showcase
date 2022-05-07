@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+import item_catalog
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('item_catalog/', include('item_catalog.urls'), name='index')
+    path('item_catalog/', include('item_catalog.urls'), name='item_catalog'),
+    path('', item_catalog.views.index, name='index')
 ]

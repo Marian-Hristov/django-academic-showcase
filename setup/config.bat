@@ -1,1 +1,3 @@
 set ADBPWD=academyadmin
+set DEBUG=True
+set SECRET_KEY=85f458a116ba684ee7d962c8cb12478e9c05b2b0c4e1d84383756c4095de978d
