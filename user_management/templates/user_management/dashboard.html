@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    Hello, {{Profile.user.first_name | default:user.username}}!
+
+    <img style='display:block; width:100px;height:100px;' id='base64image'
+       src="data:image/jpg;base64, {{ Profile.avatar }}"/>
+{%else%}
+    Hello, Guest!
+{%endif%}
+<br/> <br/>
+
+<br/><br/>
+<div>
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+        <a href="../login">Login</a>
+        <a href="../register"> Register </a>
+    {% endif %}
+</div>
+
+{%endblock%}
