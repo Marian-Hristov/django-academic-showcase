@@ -56,5 +56,20 @@ class ProfileCreationForm(forms.Form):
         profile.save()
         return profile
 
-    def get_decoded_avatar(self, profile):
-        return 
+
+class PasswordResetForm(forms.Form):
+    exist_pass = forms.CharField(label='Enter existing password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Enter new password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm new password', widget=forms.PasswordInput)
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("Input password's do not match!")
+
+        return password2
+    
+    def get_pass(self):
+        return (self.cleaned_data.get('exist_pass'), self.cleaned_data.get('password2'))
