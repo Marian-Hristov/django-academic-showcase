@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
+from django.urls import reverse, reverse_lazy
 
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
 
 from item_catalog.models import Post
 
@@ -19,7 +21,18 @@ class PostUpdateView(UpdateView):
 
     fields = [
         "title",
+        "project",
     ]
+
+    def get_success_url(self):
+        pk = self.kwargs["pk"]
+        return reverse("post-detail", kwargs={"pk": pk})
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = "item_catalog/post_delete.html"
+    success_url = reverse_lazy('item_catalog')
+
 
 def index(request):
     items = Post.objects.filter()

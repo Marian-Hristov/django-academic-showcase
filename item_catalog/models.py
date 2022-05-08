@@ -38,7 +38,7 @@ class Project(models.Model):
     image = models.BinaryField(default=get_def_proj_avatar,null=False,blank=False)
     creation_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(default=one_week_hence,validators=[due_date_validation])
-    user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, null=False, blank=False)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False, blank=False)
 
     def __str__(self) -> str:
         return self.name

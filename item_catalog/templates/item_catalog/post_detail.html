@@ -11,7 +11,7 @@
     {% if user.username == object.project.user.user.username %}
     <div class="post-actions">
         <a href="{% url 'post-update' object.id %}">Edit</a>
-        <a>Delete</a>
+        <a href="{% url 'post-delete' object.id %}">Delete</a>
     </div>
     {% endif %}
     <div class="project-info">
