@@ -22,7 +22,7 @@
             </div>
             <div class="project-info-attr">
                 <p class="attr-name">Type:</p>
-                <p class="attr-value">{{ object.project.type }}</p>
+                <p class="attr-value">{{ object.project.project_type }}</p>
             </div>
             <div class="project-info-attr">
                 <p class="attr-name">Field:</p>
@@ -56,6 +56,19 @@
                 <p class="attr-name">Likes:</p>
                 <p class="attr-value">{{ object.get_number_of_likes }}</p>
             </div>
+            <div class="project-like-container">
+                {% comment %} {% if user in object.likes.all %}
+                    <form action="{% url 'post-like' object.pk disliked %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="post-id" value="{{ object.id }}">Dislike</button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'post-like' object.pk null %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" name="post-id" value="{{ object.id }}">Like</button>
+                    </form>
+                {% endif %} {% endcomment %}
+            </div>
     </div>
     <div class="comment-section-container">
         {% for comment in object.comments.all %}
@@ -74,6 +87,7 @@
     </div>
     <div class="add-comment-container">
         <form action="" method="post">
+            {% csrf_token %}
             <textarea name="add-comment-input" id="add-comment-input" cols="30" rows="5"></textarea>
             <input type="submit" value="Comment">
         </form>

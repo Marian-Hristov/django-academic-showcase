@@ -1,6 +1,8 @@
 from django.db import models
 from django.forms import ValidationError
 from user_management.models import Profile
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 import os
 import base64
 
@@ -23,10 +25,17 @@ def empty_string_validation(string: str):
     if len(string) < 1:
         raise ValidationError("Post title cannot be empty")
 
+
 # Function to get image
 def get_def_proj_avatar():
     with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'academic_showcase/default_images/project_avtr.png'), "rb") as img_file:
         return base64.b64encode(img_file.read())
+
+
+class Rating(models.Model):
+    rating_value = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False, blank=False)
+
 
 class Project(models.Model):
     name = models.CharField(max_length=75)
@@ -45,16 +54,27 @@ class Project(models.Model):
 
 
 class Post(models.Model):
+
+    def __get_zero_ratings():
+        return [0]
+
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    ratings = models.ManyToManyField(Rating, related_name="post_rating", default=__get_zero_ratings(), null=True, blank=True)
     title = models.CharField(max_length=100,validators=[empty_string_validation])
     flagged = models.BooleanField(default=False)
     likes = models.ManyToManyField(Profile, related_name="post_like")
 
+    def __str__(self) -> str:
+        return self.title
+
     def get_number_of_likes(self):
         return self.likes.count()
 
-    def __str__(self) -> str:
-        return self.title
+    def get_avrg_rating(self):
+        return self.ratings.aggregate(Avg("rating_value"))
+    
+    def user_has_liked(self, user):
+        return self.likes.all()
 
 
 class Comment(models.Model):
