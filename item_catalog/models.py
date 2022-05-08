@@ -1,5 +1,8 @@
 from django.db import models
 from django.forms import ValidationError
+from user_management.models import Profile
+import os
+import base64
 
 # Create your models here.
 
@@ -20,27 +23,19 @@ def empty_string_validation(string: str):
     if len(string) < 1:
         raise ValidationError("Post title cannot be empty")
 
-
-class ImageFile(models.Model):
-    image = models.FileField()
-    image_data = models.BinaryField(null=True,blank=True)
-
-
-class Profile(models.Model):
-    name = models.CharField(max_length=30) # placeholder so i can use profile
-
-    def __str__(self) -> str:
-        return self.name
-
+# Function to get image
+def get_def_proj_avatar():
+    with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'academic_showcase/default_images/project_avtr.png'), "rb") as img_file:
+        return base64.b64encode(img_file.read())
 
 class Project(models.Model):
     name = models.CharField(max_length=75)
-    type = models.CharField(max_length=40)
+    project_type = models.CharField(max_length=40)
     field = models.CharField(max_length=50)
-    keywords = models.CharField(max_length=500) # is there a way to have an array of keywords?
+    keywords = models.CharField(max_length=500)
     description = models.CharField(max_length=500)
     status = models.CharField(max_length=20)
-    image = models.ForeignKey(ImageFile, null=True, blank=True,on_delete=models.DO_NOTHING)
+    image = models.BinaryField(default=get_def_proj_avatar,null=False,blank=False)
     creation_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(default=one_week_hence,validators=[due_date_validation])
     user = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, null=False, blank=False)
@@ -52,6 +47,7 @@ class Project(models.Model):
 class Post(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     title = models.CharField(max_length=100,validators=[empty_string_validation])
+    flagged = models.BooleanField(default=False)
     likes = models.ManyToManyField(Profile, related_name="post_like")
 
     def get_number_of_likes(self):
@@ -72,41 +68,3 @@ class Comment(models.Model):
 
     def get_comments(self):
         return Comment.objects.filter(parent=self)
-
-
-# class Commentable(models.Model):
-
-#     # returns an list of comment_sections
-#     def get_children(self):
-#         return None #TODO get children where id is equal to this objects id, (Marian, 04-26)
-#                         # TODO maybe this should be in views? (Marian, 04-26)
-
-
-# class CommentSection(Commentable):
-#     parent = models.ForeignKey(Commentable, on_delete=models.CASCADE, related_name='+')
-
-#     # validation for parent type
-#     def validate_parent(parent):
-#         if isinstance(Commentable): # TODO: do we need this? (Marian, 04-27)
-#             return True
-#         return False
-
-#     def __init__(self, parent):
-#         if self.validate_parent(parent):
-#             self.parent = parent
-#         else:
-#             raise TypeError("Accepted parent of CommentSection type: Post, CommentSection")
-
-#     # returns the parent, either post or comment_section
-#     def get_parent(self):
-#         return self.parent
-
-
-# class Comment(models.Model):
-#     creation_date = models.DateField(auto_now_add=True)
-#     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-#     body = models.CharField(max_length=300)
-#     parent = models.ForeignKey(CommentSection, on_delete=models.CASCADE)
-
-#     def __str__(self) -> str:
-#         return f"Comment from {self.user} at {self.creation_date}: {self.body[0:5]}..." 

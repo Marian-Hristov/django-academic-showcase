@@ -8,6 +8,12 @@
     <div class="title-container">
         <h1>{{ object.title }}</h1>
     </div>
+    {% if user.username == object.project.user.user.username %}
+    <div class="post-actions">
+        <a href="{% url 'post-update' object.id %}">Edit</a>
+        <a>Delete</a>
+    </div>
+    {% endif %}
     <div class="project-info">
         <h2>Project Info</h2>
             <div class="project-info-attr">
@@ -44,7 +50,7 @@
             </div>
             <div class="project-info-attr">
                 <p class="attr-name">By:</p>
-                <p class="attr-value">{{ object.project.user.name }}</p>
+                <p class="attr-value">{{ object.project.user.user.username }}</p>
             </div>
             <div class="project-info-attr">
                 <p class="attr-name">Likes:</p>

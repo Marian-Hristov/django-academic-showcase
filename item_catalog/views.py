@@ -17,6 +17,10 @@ class PostUpdateView(UpdateView):
     model = Post
     template_name = "item_catalog/post_update.html"
 
+    fields = [
+        "title",
+    ]
+
 def index(request):
     items = Post.objects.filter()
     template = loader.get_template('item_catalog/home.html')
