@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.template import loader
 
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView
 
 from item_catalog.models import Post
 
@@ -11,6 +12,10 @@ from item_catalog.models import Post
 class PostDetailView(DetailView):
     model = Post
     template_name = 'item_catalog/post_detail.html'
+
+class PostUpdateView(UpdateView):
+    model = Post
+    template_name = "item_catalog/post_update.html"
 
 def index(request):
     items = Post.objects.filter()
