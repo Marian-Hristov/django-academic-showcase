@@ -55,14 +55,14 @@ class Project(models.Model):
 
 class Post(models.Model):
 
-    def __get_zero_ratings():
+    def __get_zero():
         return [0]
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    ratings = models.ManyToManyField(Rating, related_name="post_rating", default=__get_zero_ratings(), blank=True)
+    ratings = models.ManyToManyField(Rating, related_name="post_rating", default=__get_zero(), blank=True)
     title = models.CharField(max_length=100,validators=[empty_string_validation])
     flagged = models.BooleanField(default=False)
-    likes = models.ManyToManyField(Profile, related_name="post_like")
+    likes = models.ManyToManyField(Profile, related_name="post_like", default=__get_zero(), blank=True)
 
     def __str__(self) -> str:
         return self.title

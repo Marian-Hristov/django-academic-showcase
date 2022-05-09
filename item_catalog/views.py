@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseServerError
 from django.shortcuts import render
 from django.template import loader
 from django.urls import reverse, reverse_lazy
@@ -10,20 +10,34 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 
 from item_catalog.models import Post
+from user_management.models import Profile
 
 # Create your views here.
 
-# def LikeView(request, pk, action):
-#     post = get_object_or_404(Post, id=request.POST.request.get('post-id'))
-#     if action == "disliked":
-#         post.likes.add(request.user)
-#     else:
-#         post.likes.remove(request.user)
-#     return HttpResponseRedirect(reverse('post-detail', args=[str(pk),action]))
+def likeView(request, pk, action):
+    if request.method == "POST":
+        post = get_object_or_404(Post, id=pk)
+        user = get_object_or_404(Profile, user=request.user)
+        if action == "disliked":
+            post.likes.remove(user)
+            post.save()
+        elif action == "liked":
+            post.likes.add(user)
+            post.save()
+        else:
+            return HttpResponseServerError("Invalid action on post")
+        return HttpResponseRedirect(reverse('post-detail', args=[str(pk)]))
+    else:
+        return Http404()
 
 class PostDetailView(DetailView):
     model = Post
     template_name = 'item_catalog/post_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = get_object_or_404(Profile, user=self.request.user)
+        return context
 
 class PostUpdateView(UpdateView):
     model = Post

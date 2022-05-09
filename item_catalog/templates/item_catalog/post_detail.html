@@ -57,17 +57,17 @@
                 <p class="attr-value">{{ object.get_number_of_likes }}</p>
             </div>
             <div class="project-like-container">
-                {% comment %} {% if user in object.likes.all %}
-                    <form action="{% url 'post-like' object.pk disliked %}" method="POST">
+                {% if profile in object.likes.all %}
+                    <form action="{% url 'post-like' object.id 'disliked' %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" name="post-id" value="{{ object.id }}">Dislike</button>
                     </form>
                 {% else %}
-                    <form action="{% url 'post-like' object.pk null %}" method="POST">
+                    <form action="{% url 'post-like' object.id 'liked' %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit" name="post-id" value="{{ object.id }}">Like</button>
+                        <button type="submit">Like</button>
                     </form>
-                {% endif %} {% endcomment %}
+                {% endif %}
             </div>
     </div>
     <div class="comment-section-container">
