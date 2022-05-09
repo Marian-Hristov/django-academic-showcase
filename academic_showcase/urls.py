@@ -20,8 +20,9 @@ import item_catalog
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('item_catalog/', include('item_catalog.urls'), name='item_catalog'),
-    path('user_management/', include('user_management.urls'), name='dashboard'),
-    path('user_management/', include('django.contrib.auth.urls')),
-    path('', item_catalog.views.index, name='index')
+    path('item_catalog/', include('item_catalog.urls'), name='posts'),
+    # path('user_management/', include('user_management.urls'), name='dashboard'),
+    path('', include('django.contrib.auth.urls')),
+    path('', include('user_management.urls'), name="redirect-to-login"),
+    # path('', item_catalog.views.index, name='index')
 ]

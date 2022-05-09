@@ -59,7 +59,7 @@ class Post(models.Model):
         return [0]
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    ratings = models.ManyToManyField(Rating, related_name="post_rating", default=__get_zero_ratings(), null=True, blank=True)
+    ratings = models.ManyToManyField(Rating, related_name="post_rating", default=__get_zero_ratings(), blank=True)
     title = models.CharField(max_length=100,validators=[empty_string_validation])
     flagged = models.BooleanField(default=False)
     likes = models.ManyToManyField(Profile, related_name="post_like")

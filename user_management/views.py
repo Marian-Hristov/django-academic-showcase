@@ -5,12 +5,10 @@ from django.views import generic
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from .models import Profile, User, get_def_avatar
-
-
 from user_management.models import Profile
 from .forms import ProfileCreationForm
 from django.contrib import messages
-from django.views.generic import TemplateView
+from django.views.generic.base import RedirectView
 # Create your views here.
 
 # class Dashboard(TemplateView):
@@ -20,6 +18,12 @@ from django.views.generic import TemplateView
 #         context = super().get_context_data(**kwargs)
 #         print(self.user.username)s
 #         return context
+
+class LoginRedirectView(RedirectView):
+    pattern_name = 'redirect-to-login'
+    
+    def get_redirect_url(self, *args, **kwargs):
+        return '/dashboard'
 
 def get_profile(inp_user):
     return Profile.objects.all().filter(user_id=inp_user.id)
