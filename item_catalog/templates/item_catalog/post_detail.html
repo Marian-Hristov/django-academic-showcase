@@ -86,10 +86,10 @@
         {% endfor %}
     </div>
     <div class="add-comment-container">
-        <form action="" method="post">
+        {<form action="" method="post">
             {% csrf_token %}
-            <textarea name="add-comment-input" id="add-comment-input" cols="30" rows="5"></textarea>
-            <input type="submit" value="Comment">
+            {{ form.as_p }}
+            <button type="submit">Submit</button>
         </form>
     </div>
 </div>

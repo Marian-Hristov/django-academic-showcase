@@ -62,7 +62,7 @@ class Post(models.Model):
     ratings = models.ManyToManyField(Rating, related_name="post_rating", default=__get_zero(), blank=True)
     title = models.CharField(max_length=100,validators=[empty_string_validation])
     flagged = models.BooleanField(default=False)
-    likes = models.ManyToManyField(Profile, related_name="post_like", default=__get_zero(), blank=True)
+    likes = models.ManyToManyField(Profile, related_name="post_like", default=__get_zero(), blank=True,)
 
     def __str__(self) -> str:
         return self.title
