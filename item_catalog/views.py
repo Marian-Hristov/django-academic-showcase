@@ -68,6 +68,7 @@ class PostDetailView(DetailView):
     template_name = 'item_catalog/post_detail.html'
     context_object_name = 'post'
     redirect_authenticated_user = True
+    form_class = CommentForm
 
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -78,7 +79,15 @@ class PostDetailView(DetailView):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
         else:
-            return super(DetailView, self).get(request, *args, **kwargs)
+            self.object = self.get_object()
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                new_comment = form.save(commit=False)
+                context = self.get_context_data()
+                new_comment.user = context['profile']
+                new_comment.post = get_object_or_404(Post, id=self.kwargs['pk'])
+                new_comment.save()
+        return super(DetailView, self).get(request, *args, **kwargs)
 
     def process_request(self, request):
         if not self.request.user.is_authenticated:

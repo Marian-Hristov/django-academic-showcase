@@ -69,6 +69,14 @@
                     </form>
                 {% endif %}
             </div>
+            {% comment %} <div class="project-rating-container">
+                <div class="projet-rating-average">
+                    <p>Average rating: {{ object.get_avrg_rating() }}/10</p>
+                </div>
+                <div class="project-rating-input">
+                
+                </div>
+            </div> {% endcomment %}
     </div>
     <div class="comment-section-container">
         {% for comment in object.comments.all %}
@@ -86,10 +94,10 @@
         {% endfor %}
     </div>
     <div class="add-comment-container">
-        {<form action="" method="post">
+        <form action="{% url 'post-detail' object.id %}" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Submit</button>
+            <button type="submit" value="{{ object.id }}" name="post_id">Submit</button>
         </form>
     </div>
 </div>

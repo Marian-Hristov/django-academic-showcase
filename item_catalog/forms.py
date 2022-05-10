@@ -8,6 +8,7 @@ class CommentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.post_id = kwargs.pop('post_id', None)
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['body'].widget.attrs = {'placeholder': 'Comment here...', 'class': 'form-control', 'cols':'30', 'rows':'5'}
 
