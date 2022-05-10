@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/web_admin.css' %}">
+    <title>Based</title>
+</head>
+
+<body>
+    
+    <div class='grid-container'>
+        <div class='group-selection-container'>
+            {% for group in groups %}
+            <a href={{ group.name }}>
+                <div class='group-container'> 
+                    <h3> {{ group.name }} </h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class='main-panel-container'>
+            <div class='add-new-profile-container'>
+                Add new profile to this group
+                <button> Add </button>
+            </div>
+            <div class='user-card-area'>
+                {% for profile in profiles %}
+                <div class='user-card-container'>
+                    <h2> {{ profile.user.username }} </h2>
+                    <img style='display:block; width:100px;height:100px;' id='base64image'
+                    src="data:image/jpg;base64, {{ profile.avatar }}"/>
+                    <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }}>
+                        Remove from group
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% comment %} 
+    <ul>
+        {% for group in groups %}
+        <li>
+            {{ group.name }} {% for member in group.user_set.all %}
+            <ul>
+                <li>
+                    <a href={{ "remove_from_group/"|add:group.name|add:":"|add:member.username }}>
+                    {{ member }} 
+                    </a>
+                </li>
+            </ul>
+            {% endfor %}
+        </li>
+        {% endfor %}
+    </ul> {% endcomment %}
+</body>

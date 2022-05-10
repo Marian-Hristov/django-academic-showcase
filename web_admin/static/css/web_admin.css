@@ -1,0 +1,13 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 20fr 80fr;
+}
+
+.main-panel-container {
+    border: 1px black solid;
+}
+
+.user-card-area {
+    display: grid;
+    grid-template-columns: 30fr 30fr 30fr;
+}
