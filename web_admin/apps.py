@@ -13,21 +13,18 @@ class WebAdminConfig(AppConfig):
         # Permissons
         admin_projects = Permission.objects.filter(codename='administrate_projects').first()
         content_type = ContentType.objects.get_for_model(Group)
-        administrate_users, _= Permission.objects.get_or_create(
+
+        administrate_all_members , _= Permission.objects.get_or_create(
             codename='administrate_members',
             name='Can administrate members',
             content_type=content_type
         )
 
-        administrate_users, _= Permission.objects.get_or_create(
+        administrate_all_users , _= Permission.objects.get_or_create(
             codename='administrate_users',
             name='Can administrate all users',
             content_type=content_type
         )
-
-        # Questions -> 
-        # Do I need to keep creating permissions? Is it alright to just check by name?
-        # Does the instructor needs to be staff?
 
         # Create groups
         def create_member_group():
@@ -36,18 +33,21 @@ class WebAdminConfig(AppConfig):
 
         def create_admin_user_group():
             admin_user, _= Group.objects.get_or_create(name='Admin_user_gp')
-            admin_user.permissions.add(administrate_users)
+            admin_user.permissions.clear()
+            admin_user.permissions.add(administrate_all_members)
             admin_user.save()
 
         # This admin should be able to move and remove users from the various groups
         def create_admin_item_group():
             admin_item, _= Group.objects.get_or_create(name='Admin_item_gp')
-            admin_item.permissions.add(administrate_users, admin_projects)
+            admin_item.permissions.clear()
+            admin_item.permissions.add(administrate_all_members, admin_projects)
             admin_item.save()
 
         def create_admin_group():
             admin_group , _ = Group.objects.get_or_create(name='Admin_gp')
-            admin_group.permissions.add(administrate_users, admin_projects, administrate_users)
+            admin_group.permissions.clear()
+            admin_group.permissions.add(administrate_all_members, admin_projects, administrate_all_users)
             user, created = User.objects.get_or_create(username='Instructor')
             if created:
                 user.set_password("Python419")

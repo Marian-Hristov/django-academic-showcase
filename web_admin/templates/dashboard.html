@@ -11,7 +11,6 @@
 </head>
 
 <body>
-    
     <div class='grid-container'>
         <div class='group-selection-container'>
             {% for group in groups %}
@@ -24,6 +23,7 @@
         </div>
         <div class='main-panel-container'>
             <div class='add-new-profile-container'>
+                <h3> {{ selected_group }} </h3>
                 Add new profile to this group
                 <form method="post">
                     {% csrf_token %}
