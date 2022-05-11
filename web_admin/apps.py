@@ -50,7 +50,7 @@ class WebAdminConfig(AppConfig):
             admin_group.permissions.add(administrate_users, admin_projects, administrate_users)
             user, created = User.objects.get_or_create(username='Instructor')
             if created:
-                user.set_password("Python420")
+                user.set_password("Python419")
                 user.save()
             admin_group.user_set.add(user)
             admin_group.save()

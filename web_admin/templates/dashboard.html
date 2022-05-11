@@ -25,7 +25,11 @@
         <div class='main-panel-container'>
             <div class='add-new-profile-container'>
                 Add new profile to this group
-                <button> Add </button>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                     <input type="submit" value="Submit">
+                </form>
             </div>
             <div class='user-card-area'>
                 {% for profile in profiles %}
