@@ -11,6 +11,7 @@ class CommentForm(ModelForm):
         self.post_id = kwargs.pop('post_id', None)
         super(CommentForm, self).__init__(*args, **kwargs)
         self.fields['body'].widget.attrs = {'placeholder': 'Comment here...', 'class': 'form-control', 'cols':'30', 'rows':'5'}
+        self.fields['body'].label = 'Comment'
 
     def clean_body(self):
         data = self.cleaned_data['body']
