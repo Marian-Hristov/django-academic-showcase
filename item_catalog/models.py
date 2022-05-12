@@ -52,6 +52,11 @@ class Project(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    class Meta:
+        permissions = [
+            ('administrate_projects', 'Can administrate project')
+        ]
+
 
 class Post(models.Model):
 

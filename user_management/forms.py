@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission, Group
 from django import forms
 from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.models import ContentType
 from .models import Profile
 import base64
 
@@ -46,15 +47,36 @@ class ProfileCreationForm(forms.Form):
         new_user.first_name = self.cleaned_data.get('first_name')
         new_user.last_name = self.cleaned_data.get('last_name')
 
-        new_user.save()
         avtr_data = base64.b64encode(self.cleaned_data['avatar'].read())
 
         profile = Profile(user=new_user, avatar=avtr_data)
+        ct = ContentType.objects.get_for_model(Profile)
+        permission = Permission.objects.get(content_type=ct, codename='can_interact')
+        new_user.user_permissions.add(permission)
 
-        print(profile.avatar)
 
+        members, _ = Group.objects.get_or_create(name='Members')
+        new_user.save()
         profile.save()
+
+        if members:
+            members.user_set.add(new_user)
         return profile
 
-    def get_decoded_avatar(self, profile):
-        return 
+
+class PasswordResetForm(forms.Form):
+    exist_pass = forms.CharField(label='Enter existing password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Enter new password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm new password', widget=forms.PasswordInput)
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+
+        if password1 and password2 and password1 != password2:
+            raise ValidationError("Input password's do not match!")
+
+        return password2
+    
+    def get_pass(self):
+        return (self.cleaned_data.get('exist_pass'), self.cleaned_data.get('password2'))

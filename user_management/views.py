@@ -2,11 +2,12 @@ from multiprocessing import get_context
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import generic
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.urls import reverse_lazy
 from .models import Profile, User, get_def_avatar
+from django.contrib.auth import update_session_auth_hash
 from user_management.models import Profile
-from .forms import ProfileCreationForm
+from .forms import ProfileCreationForm, PasswordResetForm
 from django.contrib import messages
 from django.views.generic.base import RedirectView
 # Create your views here.
@@ -62,6 +63,24 @@ def register_profile(request):
             f.save()
             messages.success(request, 'Profile created successfully')
             return redirect('login')
+        else:
+            print(f.errors)
     else:
         f = ProfileCreationForm()
     return render(request, 'registration/register.html', {'form': f})
+
+def reset_pass(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'user_management/reset_password.html', {
+        'form': form
+    })
