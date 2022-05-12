@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('item_catalog/', include('item_catalog.urls'), name='item_catalog'),
     path('user_management/', include('user_management.urls'), name='dashboard'),
+    path('web_admin/', include('web_admin.urls'), name='web_admin'),
     path('user_management/', include('django.contrib.auth.urls')),
-    path('', item_catalog.views.index, name='index')
+    path('', item_catalog.views.index, name='index'),
 ]

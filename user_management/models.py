@@ -14,5 +14,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     avatar = models.BinaryField(default=get_def_avatar)
 
+    class Meta:
+        permissions = [
+            ("can_interact", "Can the user interact")
+        ]
+
     def __str__(self):
         return str(self.user.username)

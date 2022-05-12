@@ -59,6 +59,8 @@ def register_profile(request):
             f.save()
             messages.success(request, 'Profile created successfully')
             return redirect('login')
+        else:
+            print(f.errors)
     else:
         f = ProfileCreationForm()
     return render(request, 'registration/register.html', {'form': f})
