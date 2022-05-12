@@ -23,5 +23,6 @@ urlpatterns = [
     path('item_catalog/', include('item_catalog.urls'), name='item_catalog'),
     path('user_management/', include('user_management.urls'), name='dashboard'),
     path('user_management/', include('django.contrib.auth.urls')),
+    path('', include('user_messaging.urls')),
     path('', item_catalog.views.index, name='index')
 ]
