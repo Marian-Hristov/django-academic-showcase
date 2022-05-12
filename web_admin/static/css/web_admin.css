@@ -33,13 +33,24 @@ body {
 }
 
 .group-container {
-    background-color: whitesmoke;
+    /* background-color: whitesmoke; */
     padding: 12px 12px;
     width: 100%;
     border-radius: 10px;
     display: flex;
     align-content: center;
     justify-content: space-between;
+}
+
+.group-selection-container .selected-group {
+    background-color: rgb(255, 251, 251);
+    padding: 6px 12px;
+    width: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    box-shadow: 0px 6px 6px 0px #00000018;
 }
 
 .group-container h4{

@@ -20,7 +20,11 @@
     <div class='grid-container'>
         <div class='group-selection-container'>
             {% for group in groups %}
+            {% if group.name == selected_group.name %}
+            <a href="{{ group.name }}" class="selected-group">
+            {% else %}
             <a href="{{ group.name }}"">
+            {% endif %} 
                 <div class='group-container'> 
                     <h4> {{ group.name }} </h4>
                     <h4> {{ group.user_set.count }} </h4>
@@ -61,16 +65,16 @@
                             <p> {{ profile.user.username }} </p>
                             <p> {{ profile.user.id }} </p>
                             <p> {{ profile.user.email }} </p>
-                            <p class="{{ selected_group.name }} "> {{ selected_group.name }} </p>
+                            <!-- <p class="{{ selected_group.name }} "> {{ selected_group.name }} </p> -->
                         </div>
                     </div>
                     <div class="bottom">
-                        {% if profile.user.groups.count == 1 %}
+                        {% if profile.user.groups.count > 1 %}
                         <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="delete-from-group">
                             Remove
                         {% else %}
                         <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="remove-from-django">
-                            Disable
+                            Remove
                         {% endif %}
                         </a>
                         {% if selected_group.name == "Members" %}

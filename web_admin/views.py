@@ -10,8 +10,6 @@ from user_management.forms import ProfileCreationForm
 from user_management.models import Profile
 from web_admin.forms import AddProfileToGroupForm
 
-# Create your views here.
-
 def index(request):
     return render_dashboard(request, "Members")
 
