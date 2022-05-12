@@ -24,10 +24,26 @@ def send_message(request):
                 )
                 new_message.save()
 
-                for elem in Message.objects.all():
-                    print(f'{elem.sender.user.username} sent a message to {elem.receiver.user.username} that said: {elem.body}')
+                return redirect('../view_messages')
         else:
             f = MessagingForm()
-        return render(request, "user_messaging/messaging.html", {'form': f})
+        return render(request, "user_messaging/send_messages.html", {'form': f})
+    else:
+        return redirect('dashboard')
+
+def view_messages(request):
+    if request.user.is_authenticated:
+        context = {'messages': None, 'has_msg': True}
+        users_messages = []
+        for msg in Message.objects.all():
+            if msg.sender.user.username == request.user.username or msg.receiver.user.username == request.user.username:
+                msg.sender.avatar = bytes(msg.sender.avatar).decode()
+                msg.receiver.avatar = bytes(msg.receiver.avatar).decode()
+                users_messages.append(msg)
+        if len(users_messages) == 0:
+            context['has_msg'] = False
+            return render(request, 'user_messaging/view_messages.html', context=context)
+        context['messages'] = users_messages
+        return render(request, 'user_messaging/view_messages.html', context=context)
     else:
         return redirect('dashboard')
