@@ -16,7 +16,9 @@ class CommentForm(ModelForm):
     def clean_body(self):
         data = self.cleaned_data['body']
         if len(data) > 500:
-            raise ValidationError("Comment too long! Max of 500")
+            raise ValidationError("Comment too long! Max of 500 characters")
+        elif len(data) < 1:
+            raise ValidationError("Comment too small! Min of 1 character")
         return data
     
     def return_data(self):
