@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load tags %} 
 
 <head>
     <meta charset="UTF-8">
@@ -11,54 +12,79 @@
 </head>
 
 <body>
+    <script>
+        window.onProfileAdded = () => {
+            setTimeout(() => window.location.reload(), 1000);
+        }
+    </script>
     <div class='grid-container'>
         <div class='group-selection-container'>
             {% for group in groups %}
-            <a href={{ group.name }}>
+            <a href="{{ group.name }}"">
                 <div class='group-container'> 
-                    <h3> {{ group.name }} </h3>
+                    <h4> {{ group.name }} </h4>
+                    <h4> {{ group.user_set.count }} </h4>
                 </div>
             </a>
             {% endfor %}
         </div>
         <div class='main-panel-container'>
-            <div class='add-new-profile-container'>
-                <h3> {{ selected_group }} </h3>
-                Add new profile to this group
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form }}
-                     <input type="submit" value="Submit">
-                </form>
+            <div class='control-options'>
+                <div class='add-new-profile-container'>
+                    <form method="post" class="add_group">
+                        {% csrf_token %}
+                        {{ form }}
+                        <input type="submit" value="Add">
+                    </form>
+
+                {% if selected_group.name == "Members" %}
+                <button target="popup" onclick="
+                    let w = window.open('./profile_creation','popup','width=600,height=600');
+                    return false;
+                    "
+                >
+                    Create new member.
+                </button>
+                {% endif %}
+
+                </div>
             </div>
+
             <div class='user-card-area'>
                 {% for profile in profiles %}
                 <div class='user-card-container'>
-                    <h2> {{ profile.user.username }} </h2>
-                    <img style='display:block; width:100px;height:100px;' id='base64image'
-                    src="data:image/jpg;base64, {{ profile.avatar }}"/>
-                    <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }}>
-                        Remove from group
-                    </a>
+                    <div class="top">
+                        <div class="left">
+                            <img src="data:image/jpg;base64, {{ profile.avatar }}"/>
+                        </div>
+                        <div class="right">
+                            <p> {{ profile.user.username }} </p>
+                            <p> {{ profile.user.id }} </p>
+                            <p> {{ profile.user.email }} </p>
+                            <p class="{{ selected_group.name }} "> {{ selected_group.name }} </p>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }}>
+                        {% if selected_group.name == "Members" %}
+                            Delete 
+                        {% else %}
+                            Remove 
+                        {% endif %}
+                        </a>
+                        {% if selected_group.name == "Members" %}
+                            <a href={{ "block/"|add:profile.user.username }}>
+                            {% if profile.user|check_permission:'can_interact' %}
+                                    Block
+                            {% else %}
+                                    Unblock
+                            {% endif %}
+                            </a>
+                        {% endif %}
+                    </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
     </div>
-{% comment %} 
-    <ul>
-        {% for group in groups %}
-        <li>
-            {{ group.name }} {% for member in group.user_set.all %}
-            <ul>
-                <li>
-                    <a href={{ "remove_from_group/"|add:group.name|add:":"|add:member.username }}>
-                    {{ member }} 
-                    </a>
-                </li>
-            </ul>
-            {% endfor %}
-        </li>
-        {% endfor %}
-    </ul> {% endcomment %}
 </body>

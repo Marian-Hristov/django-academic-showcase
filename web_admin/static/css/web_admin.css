@@ -1,13 +1,170 @@
-.grid-container {
-    display: grid;
-    grid-template-columns: 20fr 80fr;
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap');
+
+* {
+    box-sizing: border-box;
 }
 
-.main-panel-container {
-    border: 1px black solid;
+body {
+    background-color: #E4E4ED;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 25fr 75fr;
+}
+
+
+.group-selection-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px;
+    width: 100%;
+    background: #FFFFFF38;
+
+    gap: 10px;
+    /* margin-top: 20px; */
+    height: min-content;
+    border-radius: 10px;
+}
+
+.group-selection-container a{
+    text-decoration: none;
+    color: black;
+}
+
+.group-container {
+    background-color: whitesmoke;
+    padding: 12px 12px;
+    width: 100%;
+    border-radius: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+}
+
+.group-container h4{
+    margin: 0;
+    font-family: 'Inter';
+}
+
+.control-options .add-new-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.control-options .add-new-profile-container button {
+    max-width: 10%;
+}
+
+.-options form{
+    margin-top: 10px;
+    display: flex;
 }
 
 .user-card-area {
-    display: grid;
-    grid-template-columns: 30fr 30fr 30fr;
+    /* display: grid;
+    grid-template-columns: minmax(30, 45);
+    gap: 50px; */
+    display: flex;
+    max-width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.user-card-container {
+    display: flex;
+    min-width: 267px;
+    width: 267px;
+    max-width: 267px;
+    min-height: 150px;
+
+    flex-direction: column;
+    background-color: white;
+    border-radius: 25px;
+    justify-content: center;
+    box-shadow: 0px 6px 6px 0px #00000018;
+
+    margin: 10px 5px;
+    padding: 1em 2em;
+}
+
+.user-card-container .top {
+    padding: 10px;
+    display: flex;
+}
+
+.user-card-container .top img{
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.user-card-container .top .left{
+    /* background-color: blue; */
+    /* padding-top: 25px; */
+}
+
+.user-card-container .top .right {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 80%;
+}
+
+.user-card-container .top .right p {
+    margin-top: 0px;
+    line-height: 1.25;
+    margin-bottom: 0;
+    font-family: 'Inter';
+    color: rgb(0, 0, 0);
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+}
+
+.user-card-container .top .right p.Members {
+    color: black;
+}
+
+.user-card-container .top .right p.Admin_item_gp,
+.user-card-container .top .right p.Admin_user_gp {
+    color: #539200;
+}
+
+.user-card-container .top .right p.Admin_gp {
+    color: #a98d00;
+}
+
+.user-card-container .bottom {
+    margin-top: 20%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-card-container .bottom a {
+    max-width: 40%;
+    min-width: 40%;
+    text-align: center;
+    border-radius: 5%;
+    padding: 4px 0;
+
+    text-decoration: none;
+    color: black;
+
+    /* background: #FF000036; */
+    background: #ff0000b6;
+    font-family: 'Inter';
+    font-weight: 300;
+    transition: background-color 0.2s linear,
+                color 0.2s linear;
+}
+
+.user-card-container .bottom a:hover{
+    background: #ff0000f3;
+    color: white;
 }
