@@ -1,11 +1,18 @@
-.post-filters-container {
+.left-panel {
     width: 35%;
     overflow-y: visible;
-    background: white;
-    border-radius: 40px;
-    padding: 1.5rem 2rem 1.5rem 2rem;
     margin-right: 1rem;
     height: min-content;
+}
+
+.post-filters-container, .post-create {
+    background: white;
+    border-radius: 40px;
+    padding: 1rem 2rem 1rem 2rem;
+}
+
+.post-create {
+    margin-top: 1rem;
 }
 
 .post-filter {

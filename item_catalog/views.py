@@ -5,10 +5,12 @@ from django.template import loader
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
 
 from django.views.generic import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 
@@ -61,6 +63,20 @@ class PostComment(SingleObjectMixin, FormView):
     def get_success_url(self):
         post = self.get_object()
         return reverse('post_detail', kwargs={'pk': post.pk})
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name = "item_catalog/post_create.html"
+    fields = [
+        "title",
+        "project"
+    ]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return super(CreateView, self).get(request, *args, **kwargs)
+
 
 class PostDetailView(DetailView):
     model = Post
@@ -141,6 +157,10 @@ class PostDeleteView(DeleteView):
         if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
+
+# class ProjectCreateView(CreateView):
+#     model = Project
+#     template_name = ".html"
 
 
 def index(request):
