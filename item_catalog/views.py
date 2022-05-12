@@ -62,7 +62,6 @@ class PostComment(SingleObjectMixin, FormView):
         post = self.get_object()
         return reverse('post_detail', kwargs={'pk': post.pk})
 
-
 class PostDetailView(DetailView):
     model = Post
     template_name = 'item_catalog/post_detail.html'
@@ -116,7 +115,7 @@ class PostUpdateView(UpdateView):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
-        return super(DetailView, self).get(request, *args, **kwargs)
+        return super(UpdateView, self).get(request, *args, **kwargs)
 
     def process_request(self, request):
         if not self.request.user.is_authenticated:
@@ -136,7 +135,7 @@ class PostDeleteView(DeleteView):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
-        return super(DetailView, self).get(request, *args, **kwargs)
+        return super(DeleteView, self).get(request, *args, **kwargs)
 
     def process_request(self, request):
         if not self.request.user.is_authenticated:

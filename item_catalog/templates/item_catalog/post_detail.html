@@ -60,23 +60,15 @@
                 {% if profile in object.likes.all %}
                     <form action="{% url 'post-like' object.id 'disliked' %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit" name="post-id" value="{{ object.id }}">Dislike</button>
+                        <button class="like-button" type="submit">Dislike</button>
                     </form>
                 {% else %}
                     <form action="{% url 'post-like' object.id 'liked' %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit">Like</button>
+                        <button class="like-button" type="submit">Like</button>
                     </form>
                 {% endif %}
             </div>
-            {% comment %} <div class="project-rating-container">
-                <div class="projet-rating-average">
-                    <p>Average rating: {{ object.get_avrg_rating() }}/10</p>
-                </div>
-                <div class="project-rating-input">
-                
-                </div>
-            </div> {% endcomment %}
     </div>
     <div class="comment-section-container">
         {% for comment in object.comments.all %}
