@@ -65,11 +65,12 @@
                         </div>
                     </div>
                     <div class="bottom">
-                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }}>
-                        {% if selected_group.name == "Members" %}
-                            Delete 
+                        {% if profile.user.groups.count == 1 %}
+                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="delete-from-group">
+                            Remove
                         {% else %}
-                            Remove 
+                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="remove-from-django">
+                            Disable
                         {% endif %}
                         </a>
                         {% if selected_group.name == "Members" %}

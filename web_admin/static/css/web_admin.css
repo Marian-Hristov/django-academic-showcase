@@ -157,14 +157,23 @@ body {
     color: black;
 
     /* background: #FF000036; */
-    background: #ff0000b6;
+    background: #aa90901e;
     font-family: 'Inter';
     font-weight: 300;
     transition: background-color 0.2s linear,
                 color 0.2s linear;
 }
 
+.user-card-container .bottom a.remove-from-django {
+    /* background: #aa00001e; */
+}
+
 .user-card-container .bottom a:hover{
+    background: #311675fd;
+    color: white;
+}
+
+.user-card-container .bottom a.remove-from-django:hover{
     background: #ff0000f3;
     color: white;
 }

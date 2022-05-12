@@ -15,8 +15,7 @@ from web_admin.forms import AddProfileToGroupForm
 def index(request):
     return render_dashboard(request, "Members")
 
-@permission_required(perm=['auth.administrate_members'], login_url="/user_management/login", raise_exception=True)
-
+@permission_required(perm=['auth.administrate_members'], login_url="/user_management/login",)
 def toggle_block(request, user_id: str):
     # grp: Group = Group.objects.get(name="Member")
     user_obj = User.objects.get(username=user_id)
@@ -35,7 +34,7 @@ def toggle_block(request, user_id: str):
     else:
         return HttpResponseNotFound()
 
-@permission_required(perm=['auth.administrate_members'], login_url="/user_management/login", raise_exception=True)
+@permission_required(perm=['auth.administrate_members'], login_url="/user_management/login")
 def render_dashboard(request, group_name):
     canAdministrateAllUsers = request.user.has_perm('auth.administrate_users')
 
@@ -84,7 +83,6 @@ def create_profile(request):
         f = ProfileCreationForm(request.POST, request.FILES)
         if f.is_valid():
             f.save()
-            # javascript = "await new Promise(() => setTimeout(windows.close())"
             return HttpResponse('<script type="text/javascript">window.close()</script>')  
         else:
             print(f.errors)
@@ -94,5 +92,10 @@ def create_profile(request):
     return HttpResponse(template.render({'form': f}, request))
 
 def del_from_group(request, group_name, username):
-    Group.objects.get(name=group_name).user_set.remove(User.objects.get(username=username))
+    user: User = User.objects.get(username=username)
+    Group.objects.get(name=group_name).user_set.remove(user)
+    print(user.groups.count())
+    if user.groups.count() == 0:
+        user.delete()
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
