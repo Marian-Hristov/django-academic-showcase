@@ -1,0 +1,116 @@
+.left-panel {
+    width: 35%;
+    overflow-y: visible;
+    margin-right: 1rem;
+    height: min-content;
+}
+
+.post-filters-container, .post-create {
+    background: white;
+    border-radius: 40px;
+    padding: 1rem 2rem 1rem 2rem;
+}
+
+.post-create {
+    margin-top: 1rem;
+}
+
+.post-filter {
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.post-filter:hover {
+    background:rgba(0, 0, 0, 0.286);
+}
+
+.posts-container {
+    display: flex;
+    flex-flow: column nowrap;
+    width: 65%;
+    max-width: 65%;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.post-main-container {
+    width: 100%;
+    background: white;
+    border-radius: 40px;
+    padding: 1.5rem 2rem 1.5rem 2rem;
+    margin-bottom: 1rem;
+    height: 100%;
+    overflow: visible;
+}
+
+.post-main-container:last-child {
+    margin-bottom: 0;
+}
+
+.post-title-container{
+    font-stretch: expanded;
+}
+
+.post-info-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding: 0.5rem 0 0.5rem 0;
+}
+
+.post-user-info {
+    display: inherit;
+}
+
+.post-field {
+    text-transform: capitalize;
+    color: #0D26FC;
+    background: #bac1fd;
+    padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+    border-radius: 0.4rem;
+}
+
+.post-user-image-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    background:rgb(244 244 244);
+    padding: 0.5rem;
+    height: 4rem;
+    width: 4rem;
+    border-radius: 1.2rem;
+    margin-right: 1.5rem;
+}
+
+.post-user-image, .post-user-image svg {
+    height: 100%;
+    width: 100%;
+    color:rgb(170, 170, 170);
+}
+
+.user-text {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.post-creation-date {
+    color: rgb(170, 170, 170);
+    width: 100%;
+}
+
+.post-description {
+    padding-bottom: 0.5rem;
+}
+
+.reply-button {
+    display: flex;
+}
+
+.reply-button svg {
+    height: 1.2rem;
+    padding-right: 0.5rem;
+}
