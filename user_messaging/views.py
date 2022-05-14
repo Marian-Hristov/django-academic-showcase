@@ -37,6 +37,9 @@ def view_messages(request):
         users_messages = []
         for msg in Message.objects.all():
             if msg.sender.user.username == request.user.username or msg.receiver.user.username == request.user.username:
+                if msg.receiver.user.username == request.user.username:
+                    Message.objects.filter(pk=msg.pk).update(read_receiver=True)
+                    msg.read_receiver = True
                 msg.sender.avatar = bytes(msg.sender.avatar).decode()
                 msg.receiver.avatar = bytes(msg.receiver.avatar).decode()
                 users_messages.append(msg)
