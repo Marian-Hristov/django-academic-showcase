@@ -25,6 +25,6 @@ urlpatterns = [
     path('user_management/', include('user_management.urls'), name='dashboard'),
     path('web_admin/', include('web_admin.urls'), name='web_admin'),
     path('user_management/', include('django.contrib.auth.urls')),
-    path('', include('user_messaging.urls')),
+     path('messaging', include('user_messaging.urls')),
     path('', item_catalog.views.index, name='index')
 ]
