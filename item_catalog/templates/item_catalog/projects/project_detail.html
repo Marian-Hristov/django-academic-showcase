@@ -1,4 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
-<p>{{ object.name }}</p>
+<div class="project">
+    <h2>Project Info</h2>
+    <div class="project-info-attr">
+        <p class="attr-name">Name:</p>
+        <p class="attr-value">{{ object.name }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Type:</p>
+        <p class="attr-value">{{ object.project_type }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Field:</p>
+        <p class="attr-value">{{ object.field }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Keywords:</p>
+        <p class="attr-value">{{ object.keywords }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Description:</p>
+        <p class="attr-value">{{ object.description }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Status:</p>
+        <p class="attr-value">{{ object.status }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Created:</p>
+        <p class="attr-value">{{ object.creation_date }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Due:</p>
+        <p class="attr-value">{{ object.due_date }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">By:</p>
+        <p class="attr-value">{{ object.user.user.username }}</p>
+    </div>
+</div>
 {% endblock content %}

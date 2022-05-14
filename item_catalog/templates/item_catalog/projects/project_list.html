@@ -13,7 +13,7 @@
 <div class="user-projects">
     {% for project in object_list %}
         <div class="project-container">
-            <p>{{ project.name }}</p>
+            <a href="{% url 'project-detail' user.username project.id %}">{{ project.name }}</a>
         <div>
     {% empty %}
         <p>No projects yet</p>
