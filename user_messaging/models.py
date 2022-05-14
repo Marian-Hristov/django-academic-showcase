@@ -7,3 +7,4 @@ class Message(models.Model):
     sender = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="sender_users")
     receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="receiver_users")
     send_date = models.DateTimeField(auto_now_add=True)
+    read_receiver = models.BooleanField(default=False)
