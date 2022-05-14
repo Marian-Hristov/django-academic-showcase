@@ -8,4 +8,7 @@ urlpatterns = [
     path('post/<int:pk>/update', views.PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete', views.PostDeleteView.as_view(), name='post-delete'),
     path('post/<int:pk>/like/<str:action>', views.likeView, name="post-like"),
+    path('projects/personal/<str:username>', views.ProjectListView.as_view(), name="projects"),
+    path('projects/personal/<str:username>/project/<int:pk>', views.ProjectListView.as_view(), name="project-detail"),
+    path('projects/create/<str:username>', views.ProjectCreateView.as_view(), name="project-create"),
 ]

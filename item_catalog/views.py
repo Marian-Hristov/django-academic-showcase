@@ -1,3 +1,4 @@
+from msilib.schema import ListView
 from xml.etree.ElementTree import Comment
 from django.http import Http404, HttpResponse, HttpResponseServerError
 from django.shortcuts import render
@@ -6,17 +7,19 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
 
 from django.views.generic import FormView
+from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 
-from item_catalog.forms import CommentForm
+from item_catalog.forms import CommentForm, ProjectCreateForm
 
-from item_catalog.models import Post
+from item_catalog.models import Post, Project
 from user_management.models import Profile
 
 # Create your views here.
@@ -76,7 +79,9 @@ class PostCreateView(CreateView):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return super(CreateView, self).get(request, *args, **kwargs)
-
+    
+    def get_success_url(self):
+        return reverse('posts')
 
 class PostDetailView(DetailView):
     model = Post
@@ -158,9 +163,68 @@ class PostDeleteView(DeleteView):
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
 
-# class ProjectCreateView(CreateView):
-#     model = Project
-#     template_name = ".html"
+class ProjectListView(ListView):
+    model = Project
+    template_name = "item_catalog/projects/project_list.html"
+
+    def get_queryset(self):
+        queryset = super(ProjectListView, self).get_queryset()
+        user = Profile.objects.get(user__username=self.kwargs['username'])
+        return queryset.filter(user=user)
+        
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = "item_catalog/projects/project_detail.html"
+
+
+class ProjectCreateView(CreateView):
+    model = Project
+    template_name = "item_catalog/projects/project_create.html"
+    fields = [
+        "name",
+        "project_type",
+        "field",
+        "keywords",
+        "description",
+        "status",
+        # "image", #TODO add this field
+        "due_date",
+    ]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return super(CreateView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+            form.instance.user = self.get_context_data()['profile']
+            return super().form_valid(form)
+
+    # def post(self, request, *args, **kwargs):
+    #     if not request.user.is_authenticated:
+    #         return HttpResponseRedirect(reverse('redirect-to-login'))
+    #     else:
+    #         self.object = self.get_object()
+    #         form = ProjectCreateForm(request.POST)
+    #         if form.is_valid():
+    #             new_project = form.save(commit=False)
+    #             context = self.get_context_data()
+    #             new_project.user = context['profile']
+    #             new_project.save()
+    #     return super(ListView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['profile'] = get_object_or_404(Profile, user=self.request.user)
+            context['form'] = ProjectCreateForm()
+        return context
+
+    def get_success_url(self):
+        context = self.get_context_data()
+        user = get_object_or_404(User, profile=context['profile'])
+        return reverse_lazy('projects', kwargs={'username': user.username})
 
 
 def index(request):

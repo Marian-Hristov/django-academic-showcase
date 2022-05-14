@@ -15,9 +15,6 @@
     {%endif%}
     </div>
 </div>
-<div class="user-projects">
-
-</div>
 <div class="user-actions">
     {% if user.is_authenticated %}
         <div class="user-action">
@@ -25,6 +22,9 @@
         </div>
         <div class="user-action">
             <a href="../reset_password ">Reset password</a>
+        </div>
+        <div class="user-action">
+            <a href="{% url 'projects' user.username %}">Your Projects</a>
         </div>
     {% else %}
         <div class="user-action">

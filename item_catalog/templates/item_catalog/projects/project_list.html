@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block extrahead %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/projects.css' %}">
+{% endblock extrahead %}
+{% block content %}
+<div class="list-title">
+    <h1>Your Projects</h1>
+</div>
+<div class="new-project">
+    <a href="{% url 'project-create' user.username %}">Create a new project</a>
+</div>
+<div class="user-projects">
+    {% for project in object_list %}
+        <div class="project-container">
+            <p>{{ project.name }}</p>
+        <div>
+    {% empty %}
+        <p>No projects yet</p>
+    {% endfor %}
+<div>
+{% endblock content %}

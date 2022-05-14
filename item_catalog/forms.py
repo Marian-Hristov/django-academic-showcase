@@ -1,5 +1,5 @@
 from django.forms import ModelForm, ValidationError
-from .models import Comment
+from .models import Comment, Project
 
 class CommentForm(ModelForm):
     class Meta:
@@ -23,3 +23,18 @@ class CommentForm(ModelForm):
     
     def return_data(self):
         return (self.cleaned_data['body'])
+
+
+class ProjectCreateForm(ModelForm):
+    class Meta:
+        model = Project
+        fields = [
+            "name",
+            "project_type",
+            "field",
+            "keywords",
+            "description",
+            "status",
+            # "image", #TODO add this field
+            "due_date",
+        ]
