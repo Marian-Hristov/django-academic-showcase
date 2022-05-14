@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.urls import reverse_lazy
 from .models import Profile, User, get_def_avatar
 from django.contrib.auth import update_session_auth_hash
+from user_messaging.models import Message
 from user_management.models import Profile
 from .forms import ProfileCreationForm, PasswordResetForm
 from django.contrib import messages
@@ -20,6 +21,13 @@ from django.views.generic.base import RedirectView
 #         print(self.user.username)s
 #         return context
 
+def get_user_msgs(username):
+    for msg in Message.objects.all():
+        print(f'{msg.body} {msg.read_receiver}')
+        if msg.receiver.user.username == username and msg.read_receiver == False:
+            return True
+    return False
+            
 class LoginRedirectView(RedirectView):
     pattern_name = 'redirect-to-login'
     
@@ -31,7 +39,7 @@ def get_profile(inp_user):
 
 def dashboard(request):
     if request.user.is_authenticated:
-        context = {'Profile': None, 'User': User.objects.all().filter(username=request.user).first()}
+        context = {'Profile': None, 'User': User.objects.all().filter(username=request.user).first(), 'has_msg': False}
         if len(get_profile(context['User'])) == 0:
             new_profile = Profile(
                 user = User.objects.all().filter(username=request.user).first()
@@ -44,6 +52,7 @@ def dashboard(request):
         else:
             profile = get_profile(context['User'])[0]
             profile.avatar = bytes(profile.avatar).decode()
+            context['has_msg'] = get_user_msgs(request.user.username)
             context['Profile'] = profile
         return render(request, 'user_management/dashboard.html', context=context)
     else:
