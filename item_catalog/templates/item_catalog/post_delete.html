@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/post.css' %}">
+{% endblock extrahead %}
+{% block content %}
+{% if not user.username == object.project.user.user.username %}
+    <p>You can only delete your own posts!</p>
+{% else %}
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete your post called "<b>{{ object.title }}</b>"?</p>
+    {{ form }}
+    <input type="submit" value="Confirm">
+</form>
+{% endif %}
+{% endblock content %}
