@@ -26,5 +26,5 @@ urlpatterns = [
     path('web_admin/', include('web_admin.urls'), name='web_admin'),
     path('user_management/', include('django.contrib.auth.urls')),
      path('message/', include('user_messaging.urls')),
-    path('', item_catalog.views.index, name='index')
+    path('', item_catalog.views.PostListView.as_view(), name='index')
 ]

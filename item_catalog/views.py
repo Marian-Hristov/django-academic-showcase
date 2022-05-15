@@ -280,11 +280,17 @@ class ProjectDeleteView(DeleteView):
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
 
+class PostListView(ListView):
+    model = Post
+    template_name = 'item_catalog/home.html'
 
-def index(request):
-    items = Post.objects.filter()
-    template = loader.get_template('item_catalog/home.html')
-    context = {
-        'posts': items
-    }
-    return HttpResponse(template.render(context, request))
+    def get_queryset(self):
+        search = self.request.GET.get('search', None)
+        original_qs = super().get_queryset() 
+        if search is None:
+            # original qs
+            print('no search')
+            return original_qs
+        else:
+            print(f'search for {search}')
+            return original_qs.filter(title__icontains=search)

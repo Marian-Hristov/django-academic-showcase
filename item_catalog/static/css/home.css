@@ -115,3 +115,50 @@
     height: 1.2rem;
     padding-right: 0.5rem;
 }
+
+.searchbar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    border-radius: 40px;
+    flex-grow: 1;
+    background: white;
+    margin-top: 1rem;
+}
+
+.searchbar-container input {
+    border: none;
+    background: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.searchbar-container input::placeholder {
+    color: black;
+}
+
+.searchbar-container input:focus{
+    background-color: rgba(0, 0, 0, 0.2);
+    border: none;
+    outline: none;
+}
+
+.searchbar-container button{
+    background: none;
+    padding: 10px;
+    border: none;
+    transition: 0.2s ease-in-out;
+    margin-left: 1rem;
+}
+
+.searchbar-container button:hover{
+    transform: scale(1.1, 1.1);
+}
+
+.searchbar-container svg {
+    height: 20px;
+    width: 20px;
+}
