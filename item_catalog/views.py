@@ -1,13 +1,9 @@
-from msilib.schema import ListView
-from urllib import request
-from xml.etree.ElementTree import Comment
 from django.http import Http404, HttpResponse, HttpResponseServerError
-from django.shortcuts import render
+from django.db import models
 from django.template import loader
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 
 from django.views.generic import FormView
@@ -76,6 +72,10 @@ class PostCreateView(CreateView):
         "project"
     ]
 
+    def form_valid(self, form):
+        form.instance.flagged = False
+        return super().form_valid(form)
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
@@ -127,6 +127,12 @@ class PostDetailView(DetailView):
             context['form'] = CommentForm()
         return context
 
+def flag_post(request, pk):
+    post = Post.objects.get(id=pk)
+    post.flagged = True
+    post.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 class PostUpdateView(UpdateView):
     model = Post
@@ -169,6 +175,7 @@ class PostDeleteView(DeleteView):
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
 
+
 class ProjectListView(ListView):
     model = Project
     template_name = "item_catalog/projects/project_list.html"
@@ -192,7 +199,6 @@ class ProjectDetailView(DetailView):
         context["image"] = self.decode_image()
         return context
     
-
 
 class ProjectCreateView(CreateView):
     model = Project
