@@ -1,25 +1,34 @@
 {% extends 'base.html' %}
-{% block title %}View Messages{% endblock %}
+{% block extrahead %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/messages.css' %}">
+{% endblock extrahead %}
+{% block title %}View Messages{% endblock title%}
 {% block content %}
-
-<a href="../send_message"> Compose a new message </a>
+<a class="send-message" href="{% url 'send-message' %}"> Compose a new message </a>
 {% if has_msg %}
+    <div class="messages">
     {% for msg in messages %}
-        <div>
-            <img style='display:block; width:10px;height:10px;' id='base64image'
-       src="data:image/jpg;base64, {{ msg.sender.avatar }}"/>
-            <h3> from {{msg.sender.user.username}} </h3>
-            <img style='display:block; width:10px;height:10px;' id='base64image'
-       src="data:image/jpg;base64, {{ msg.receiver.avatar }}"/>
-            <h3> to {{msg.receiver.user.username}} </h3>
-            <p> {{msg.body}} </p>
-            <p> Sent on {{msg.send_date}} </p>
-        <div>
-
-        <br>
+        <div class="message-container">
+            <div class="users-info">
+                <div class="message-sender">
+                    <img class="user-images" id='base64image'
+                        src="data:image/jpg;base64, {{ msg.sender.avatar }}"/>
+                    <h3> from {{msg.sender.user.username}} </h3>
+                </div>
+                <div class="message-receiver">
+                    <img class="user-images" id='base64image'
+                        src="data:image/jpg;base64, {{ msg.receiver.avatar }}"/>
+                    <h3> to {{msg.receiver.user.username}} </h3>
+                </div> 
+            </div>
+            <p class="message-body"> {{msg.body}} </p>
+            <p class="message-date"> Sent on {{msg.send_date}} </p>
+        </div>
     {% endfor %}
+    </div>
 {% else %}
-    <h1> Sorry, you have not sent or received any messages :(</h1>
+    <h2> Sorry, you have not sent or received any messages:(</h2>
 {% endif %}
 
 {% endblock %}

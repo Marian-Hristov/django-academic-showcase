@@ -32,7 +32,7 @@ class LoginRedirectView(RedirectView):
     pattern_name = 'redirect-to-login'
     
     def get_redirect_url(self, *args, **kwargs):
-        return '/dashboard'
+        return 'login'
 
 def get_profile(inp_user):
     return Profile.objects.all().filter(user_id=inp_user.id)

@@ -312,20 +312,14 @@ class PostListView(ListView):
     def get_queryset(self):
         search = self.request.GET.get('search', None)
         filter = self.request.GET.get('featured', None)
-        print(search, "\n", filter)
         original_qs = super().get_queryset()
-        print("original:", original_qs)
         project_fields = ["name", "project_type", "field", "keywords", "description", "status"]
         query_list = []
         # makes a query list 
         [query_list.append(models.Q(**{f"project__{field}__icontains": search})) for field in project_fields ]
         query_list.append(models.Q(**{"title__icontains": search}))
         if not search is None:
-            print(f'search for {search}')
             original_qs = original_qs.filter(reduce(operator.or_, query_list)).distinct()
-        print(f"after search for {search}: {original_qs}")
         if not filter is None:
-            print(f"order by {filter}")
             original_qs = original_qs.order_by(f"{filter}")
-        print(f"after filter {filter}: {original_qs}")
         return original_qs
