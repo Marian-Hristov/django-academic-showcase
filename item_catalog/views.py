@@ -1,4 +1,5 @@
 from msilib.schema import ListView
+from urllib import request
 from xml.etree.ElementTree import Comment
 from django.http import Http404, HttpResponse, HttpResponseServerError
 from django.shortcuts import render
@@ -188,7 +189,6 @@ class ProjectCreateView(CreateView):
         "keywords",
         "description",
         "status",
-        # "image", #TODO add this field
         "due_date",
     ]
 
@@ -201,19 +201,6 @@ class ProjectCreateView(CreateView):
             form.instance.user = self.get_context_data()['profile']
             return super().form_valid(form)
 
-    # def post(self, request, *args, **kwargs):
-    #     if not request.user.is_authenticated:
-    #         return HttpResponseRedirect(reverse('redirect-to-login'))
-    #     else:
-    #         self.object = self.get_object()
-    #         form = ProjectCreateForm(request.POST)
-    #         if form.is_valid():
-    #             new_project = form.save(commit=False)
-    #             context = self.get_context_data()
-    #             new_project.user = context['profile']
-    #             new_project.save()
-    #     return super(ListView, self).get(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
@@ -225,6 +212,52 @@ class ProjectCreateView(CreateView):
         context = self.get_context_data()
         user = get_object_or_404(User, profile=context['profile'])
         return reverse_lazy('projects', kwargs={'username': user.username})
+
+class ProjectUpdateView(UpdateView):
+    model = Project
+    template_name = "item_catalog/projects/project_update.html"
+    success_url = reverse_lazy('projects')
+    redirect_authenticated_user = True
+    fields = [
+        "name",
+        "project_type",
+        "field",
+        "keywords",
+        "description",
+        "status",
+        "due_date",
+    ]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return super(UpdateView, self).get(request, *args, **kwargs)
+
+    def process_request(self, request):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return None
+
+    def get_success_url(self):
+        return reverse_lazy('projects', kwargs={'username': self.kwargs['username']})
+
+class ProjectDeleteView(DeleteView):
+    model = Project
+    template_name = "item_catalog/projects/project_delete.html"
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy('projects', kwargs={'username': self.kwargs['username']})
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return super(DeleteView, self).get(request, *args, **kwargs)
+
+    def process_request(self, request):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return None 
 
 
 def index(request):

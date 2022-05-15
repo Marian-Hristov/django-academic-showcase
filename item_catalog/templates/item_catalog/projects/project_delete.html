@@ -1,4 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-
+{% if not user.username == object.user.user.username %}
+    <p>You can only delete your own projects!</p>
+{% else %}
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete your project called "<b>{{ object.name }}</b>"?</p>
+    {{ form }}
+    <input type="submit" value="Confirm">
+</form>
+{% endif %}
 {% endblock content %}

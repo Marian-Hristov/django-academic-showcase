@@ -18,11 +18,24 @@
     font-size: 1.5rem;
 }
 
-.project-container a{
+.project-container a, .project-actions a{
     transition: 0.2s ease-in-out;
 }
 
-.project-container a:hover {
+.project-container a:hover, .project-actions a:hover {
     font-size: 1.2rem;
+}
+
+.project-info {
+    padding-left: 1rem;
+    padding-bottom: 0.4rem;
+}
+
+.project-info-attr {
+    padding-left: 1rem;
+}
+
+.attr-name{
+    font-weight: bold;
 }
 
