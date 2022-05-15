@@ -66,7 +66,15 @@
                 <form action="{% url 'flag-post' object.id %}" method="post">
                     {% csrf_token %}
                     <button class="flag-button" onclick="alert('The post has been flagged')" type="submit">Flag post</button>
-                    </form>
+                </form>
+            </div>
+            <div class="project-info-attr">
+                <p>Average rating: {% if object.get_avrg_rating is null %}0{% else %}{{ object.get_avrg_rating }}{% endif %}/10</p>
+                <form action="{% url 'rate-post' object.id user.username %}" method="post">
+                    {% csrf_token %}
+                    <input type="number" name="rating-value" id="rating-value" value="1" min="1" max="10" placeholder="Rate!">
+                    <button type="submit">Rate</button>
+                </form> 
             </div>
             <div class="project-like-container">
                 {% if profile in object.likes.all %}
