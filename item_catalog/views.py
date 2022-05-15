@@ -45,7 +45,7 @@ def likeView(request, pk, action):
 class PostComment(SingleObjectMixin, FormView):
     model = Post
     form_class = CommentForm
-    template_name = 'item_catalog/post_detail.html'
+    template_name = 'item_catalog/posts/post_detail.html'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -70,7 +70,7 @@ class PostComment(SingleObjectMixin, FormView):
 
 class PostCreateView(CreateView):
     model = Post
-    template_name = "item_catalog/post_create.html"
+    template_name = "item_catalog/posts/post_create.html"
     fields = [
         "title",
         "project"
@@ -86,7 +86,7 @@ class PostCreateView(CreateView):
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'item_catalog/post_detail.html'
+    template_name = 'item_catalog/posts/post_detail.html'
     context_object_name = 'post'
     redirect_authenticated_user = True
     form_class = CommentForm
@@ -125,7 +125,7 @@ class PostDetailView(DetailView):
 
 class PostUpdateView(UpdateView):
     model = Post
-    template_name = "item_catalog/post_update.html"
+    template_name = "item_catalog/posts/post_update.html"
 
     fields = [
         "title",
@@ -150,7 +150,7 @@ class PostUpdateView(UpdateView):
 
 class PostDeleteView(DeleteView):
     model = Post
-    template_name = "item_catalog/post_delete.html"
+    template_name = "item_catalog/posts/post_delete.html"
     success_url = reverse_lazy('item_catalog')
     redirect_authenticated_user = True
 
@@ -177,6 +177,17 @@ class ProjectListView(ListView):
 class ProjectDetailView(DetailView):
     model = Project
     template_name = "item_catalog/projects/project_detail.html"
+
+    def decode_image(self):
+        project = self.get_object()
+        print(project)
+        return bytes(project.image).decode()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["image"] = self.decode_image()
+        return context
+    
 
 
 class ProjectCreateView(CreateView):
