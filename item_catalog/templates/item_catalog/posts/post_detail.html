@@ -65,7 +65,7 @@
             <div class="project-info-attr">
                 <form action="{% url 'flag-post' object.id %}" method="post">
                     {% csrf_token %}
-                    <button class="flag-button" type="submit">Flag post</button>
+                    <button class="flag-button" onclick="alert('The post has been flagged')" type="submit">Flag post</button>
                     </form>
             </div>
             <div class="project-like-container">
