@@ -26,7 +26,7 @@ def empty_string_validation(string: str):
         raise ValidationError("Post title cannot be empty")
 
 
-# Function to get image
+# Function to get default image
 def get_def_proj_avatar():
     with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'academic_showcase/default_images/project_avtr.png'), "rb") as img_file:
         return base64.b64encode(img_file.read())

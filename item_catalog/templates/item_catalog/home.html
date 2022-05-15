@@ -10,18 +10,16 @@
                 <div class"post-filters-title">
                     <h2>Filters</h2>
                 </div>
-                <div class="post-filter clickable">
-                    <p>Name</p>
-                </div>
-                <div class="post-filter clickable">
-                    <p>Users</p>
-                </div>
-                <div class="post-filter clickable">
-                    <p>Project Type</p>
-                </div>
-                <div class="post-filter clickable">
-                    <p>Project Field</p>
-                </div>
+                <form action="{% url 'posts' %}" method="get">
+                    <label for="featured">Filters</label>
+                    <select name="featured">
+                        <option value="title"/>Post Title</option>
+                        <option value="project__project_type"/>Project Type</option>
+                        <option value="project__field"/>Project Field</option>
+                        <option value="project__user__user__username"/>Project Owner</option>
+                    </select>
+                    <input type="submit" name="filter" value="Filter"/>
+                </form>
             </div>
         </div>
         <div class="post-create">
