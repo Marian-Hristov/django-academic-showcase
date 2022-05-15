@@ -19,4 +19,3 @@ class AddProfileToGroupForm(forms.Form):
             print(AddProfileToGroupForm.profile_query)
             super(AddProfileToGroupForm, self).__init__(*args, **kwargs)
             self.fields['profile_select'].queryset = AddProfileToGroupForm.profile_query
-

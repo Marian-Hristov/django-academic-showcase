@@ -60,23 +60,32 @@
                         </div>
                     </div>
                     <div class="bottom">
-                        {% if profile.user.groups.count > 1 %}
-                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="delete-from-group">
-                            Remove
-                        {% else %}
-                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="remove-from-django">
-                            Remove
-                        {% endif %}
-                        </a>
-                        {% if selected_group.name == "Members" %}
-                            <a href={{ "block/"|add:profile.user.username }}>
-                            {% if profile.user|check_permission:'user_management.can_interact' %}
-                                    Block
+                        <div class="first-row">
+                            {% if profile.user.groups.count > 1 %}
+                            <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="delete-from-group">
+                                Remove
                             {% else %}
-                                    Unblock
+                            <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="remove-from-django">
+                                Remove
                             {% endif %}
                             </a>
+                            {% if selected_group.name == "Members" %}
+                                <a href={{ "block/"|add:profile.user.username }}>
+                                {% if profile.user|check_permission:'user_management.can_interact' %}
+                                        Block
+                                {% else %}
+                                        Unblock
+                                {% endif %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class='second-row'>
+                        {% if not profile.user|check_permission:'auth.administrate_members'%}
+                                <a href="{% url 'set_password' profile.user.id %}" target="_blank">
+                                    Reset Password
+                                </a>
                         {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
