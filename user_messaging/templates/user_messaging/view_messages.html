@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}View Messages{% endblock %}
+{% block content %}
+
+<a href="../send_message"> Compose a new message </a>
+{% if has_msg %}
+    {% for msg in messages %}
+        <div>
+            <img style='display:block; width:10px;height:10px;' id='base64image'
+       src="data:image/jpg;base64, {{ msg.sender.avatar }}"/>
+            <h3> from {{msg.sender.user.username}} </h3>
+            <img style='display:block; width:10px;height:10px;' id='base64image'
+       src="data:image/jpg;base64, {{ msg.receiver.avatar }}"/>
+            <h3> to {{msg.receiver.user.username}} </h3>
+            <p> {{msg.body}} </p>
+            <p> Sent on {{msg.send_date}} {{msg.read_receiver}}</p>
+        <div>
+
+        <br>
+    {% endfor %}
+{% else %}
+    <h1> Sorry, you have not sent or received any messages :(</h1>
+{% endif %}
+
+{% endblock %}

@@ -10,6 +10,9 @@
         <p>Hello, {{Profile.user.first_name | default:user.username}}!</p>
         <img style='display:block; width:100px;height:100px;' id='base64image'
         src="data:image/jpg;base64, {{ Profile.avatar }}"/>
+        {% if has_msg %}
+            <h1> You have a new message! </h1>
+        {% endif %}
     {%else%}
         Hello, Guest!
     {%endif%}
