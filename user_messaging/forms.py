@@ -15,6 +15,12 @@ class MessagingForm(forms.Form):
     body = forms.CharField(label="Enter Text: ", widget=forms.Textarea())
     recipients = forms.CharField(label="Message Recipient: ",
     widget=forms.Select(choices=get_profiles()))
+    
+    def __init__(self, *args, **kwargs):
+        super(MessagingForm, self).__init__(*args, **kwargs)
+
+        self.fields['recipients'] = forms.CharField(label="Message Recipient: ", widget=forms.Select(choices=get_profiles()))
+
 
     def get_data(self):
         return self.cleaned_data.get('body'), self.cleaned_data.get('recipients')
