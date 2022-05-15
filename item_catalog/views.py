@@ -1,3 +1,5 @@
+from msilib.schema import ListView
+from urllib import request
 from xml.etree.ElementTree import Comment
 from django.http import Http404, HttpResponse, HttpResponseServerError
 from django.shortcuts import render
@@ -6,17 +8,19 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
 
 from django.views.generic import FormView
+from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 
-from item_catalog.forms import CommentForm
+from item_catalog.forms import CommentForm, ProjectCreateForm
 
-from item_catalog.models import Post
+from item_catalog.models import Post, Project
 from user_management.models import Profile
 
 # Create your views here.
@@ -41,7 +45,7 @@ def likeView(request, pk, action):
 class PostComment(SingleObjectMixin, FormView):
     model = Post
     form_class = CommentForm
-    template_name = 'item_catalog/post_detail.html'
+    template_name = 'item_catalog/posts/post_detail.html'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -66,7 +70,7 @@ class PostComment(SingleObjectMixin, FormView):
 
 class PostCreateView(CreateView):
     model = Post
-    template_name = "item_catalog/post_create.html"
+    template_name = "item_catalog/posts/post_create.html"
     fields = [
         "title",
         "project"
@@ -76,11 +80,13 @@ class PostCreateView(CreateView):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return super(CreateView, self).get(request, *args, **kwargs)
-
+    
+    def get_success_url(self):
+        return reverse('posts')
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'item_catalog/post_detail.html'
+    template_name = 'item_catalog/posts/post_detail.html'
     context_object_name = 'post'
     redirect_authenticated_user = True
     form_class = CommentForm
@@ -109,17 +115,22 @@ class PostDetailView(DetailView):
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
 
+    def decode_image(self):
+        post = self.get_object()
+        return bytes(post.project.image).decode()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             context['profile'] = get_object_or_404(Profile, user=self.request.user)
+            context['image'] = self.decode_image()
             context['form'] = CommentForm()
         return context
 
 
 class PostUpdateView(UpdateView):
     model = Post
-    template_name = "item_catalog/post_update.html"
+    template_name = "item_catalog/posts/post_update.html"
 
     fields = [
         "title",
@@ -144,7 +155,7 @@ class PostUpdateView(UpdateView):
 
 class PostDeleteView(DeleteView):
     model = Post
-    template_name = "item_catalog/post_delete.html"
+    template_name = "item_catalog/posts/post_delete.html"
     success_url = reverse_lazy('item_catalog')
     redirect_authenticated_user = True
 
@@ -158,9 +169,110 @@ class PostDeleteView(DeleteView):
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
 
-# class ProjectCreateView(CreateView):
-#     model = Project
-#     template_name = ".html"
+class ProjectListView(ListView):
+    model = Project
+    template_name = "item_catalog/projects/project_list.html"
+
+    def get_queryset(self):
+        queryset = super(ProjectListView, self).get_queryset()
+        user = Profile.objects.get(user__username=self.kwargs['username'])
+        return queryset.filter(user=user)
+        
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = "item_catalog/projects/project_detail.html"
+
+    def decode_image(self):
+        project = self.get_object()
+        return bytes(project.image).decode()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["image"] = self.decode_image()
+        return context
+    
+
+
+class ProjectCreateView(CreateView):
+    model = Project
+    template_name = "item_catalog/projects/project_create.html"
+    fields = [
+        "name",
+        "project_type",
+        "field",
+        "keywords",
+        "description",
+        "status",
+        "due_date",
+    ]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return super(CreateView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+            form.instance.user = self.get_context_data()['profile']
+            return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context['profile'] = get_object_or_404(Profile, user=self.request.user)
+            context['form'] = ProjectCreateForm()
+        return context
+
+    def get_success_url(self):
+        context = self.get_context_data()
+        user = get_object_or_404(User, profile=context['profile'])
+        return reverse_lazy('projects', kwargs={'username': user.username})
+
+class ProjectUpdateView(UpdateView):
+    model = Project
+    template_name = "item_catalog/projects/project_update.html"
+    success_url = reverse_lazy('projects')
+    redirect_authenticated_user = True
+    fields = [
+        "name",
+        "project_type",
+        "field",
+        "keywords",
+        "description",
+        "status",
+        "due_date",
+    ]
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return super(UpdateView, self).get(request, *args, **kwargs)
+
+    def process_request(self, request):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return None
+
+    def get_success_url(self):
+        return reverse_lazy('projects', kwargs={'username': self.kwargs['username']})
+
+class ProjectDeleteView(DeleteView):
+    model = Project
+    template_name = "item_catalog/projects/project_delete.html"
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse_lazy('projects', kwargs={'username': self.kwargs['username']})
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return super(DeleteView, self).get(request, *args, **kwargs)
+
+    def process_request(self, request):
+        if not self.request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('redirect-to-login'))
+        return None 
 
 
 def index(request):

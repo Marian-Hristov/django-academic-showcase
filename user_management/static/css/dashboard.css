@@ -1,0 +1,12 @@
+.user-actions {
+    margin-left: 1rem;
+}
+
+.user-action {
+    padding-bottom: 0.5rem;
+    transition: 0.2s ease-in-out;
+}
+
+.user-action:hover{
+    font-size: 1.2rem;
+}

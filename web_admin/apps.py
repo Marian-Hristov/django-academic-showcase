@@ -63,4 +63,4 @@ class WebAdminConfig(AppConfig):
             create_member_group()
             create_admin_group()
         except:
-            print("here.")
+            pass

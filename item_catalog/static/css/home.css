@@ -2,7 +2,8 @@
     width: 35%;
     overflow-y: visible;
     margin-right: 1rem;
-    height: min-content;
+    height: fit-content;
+    overflow-y: auto;
 }
 
 .post-filters-container, .post-create {

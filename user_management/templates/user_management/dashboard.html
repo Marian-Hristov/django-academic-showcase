@@ -1,27 +1,41 @@
 {% extends 'base.html' %}
-
+{% block extrahead %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock extrahead %}
 {% block content %}
-{% if user.is_authenticated %}
-    Hello, {{Profile.user.first_name | default:user.username}}!
-
-    <img style='display:block; width:100px;height:100px;' id='base64image'
-       src="data:image/jpg;base64, {{ Profile.avatar }}"/>
-    {% if has_msg %}
-        <h1> You have a new message! </h1>
-    {% endif %}
-{%else%}
-    Hello, Guest!
-{%endif%}
-<br/> <br/>
-
-<br/><br/>
-<div>
+<div class="user-account-management">
+    <div class="user-greeting">
     {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">Logout</a>
-        <a href="../reset_password "> Reset password </a>
+        <p>Hello, {{Profile.user.first_name | default:user.username}}!</p>
+        <img style='display:block; width:100px;height:100px;' id='base64image'
+        src="data:image/jpg;base64, {{ Profile.avatar }}"/>
+        {% if has_msg %}
+            <h1> You have a new message! </h1>
+        {% endif %}
+    {%else%}
+        Hello, Guest!
+    {%endif%}
+    </div>
+</div>
+<div class="user-actions">
+    {% if user.is_authenticated %}
+        <div class="user-action">
+            <a href="{% url 'logout' %}">Logout</a>    
+        </div>
+        <div class="user-action">
+            <a href="../reset_password ">Reset password</a>
+        </div>
+        <div class="user-action">
+            <a href="{% url 'projects' user.username %}">Your Projects</a>
+        </div>
     {% else %}
-        <a href="../login">Login</a>
-        <a href="../register"> Register </a>
+        <div class="user-action">
+            <a href="../login">Login</a>
+        </div>
+        <div class="user-action">
+            <a href="../register">Register</a>
+        </div>
     {% endif %}
 </div>
 

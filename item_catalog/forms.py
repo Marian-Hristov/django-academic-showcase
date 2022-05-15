@@ -1,5 +1,6 @@
+from django.forms import ImageField
 from django.forms import ModelForm, ValidationError
-from .models import Comment
+from .models import Comment, Project
 
 class CommentForm(ModelForm):
     class Meta:
@@ -23,3 +24,23 @@ class CommentForm(ModelForm):
     
     def return_data(self):
         return (self.cleaned_data['body'])
+
+
+class ProjectCreateForm(ModelForm):
+    image = ImageField(label='Choose an image for avatar (Ignore if you would like to set a default image)')
+    
+    class Meta:
+        model = Project
+        fields = [
+            "name",
+            "project_type",
+            "field",
+            "keywords",
+            "description",
+            "status",
+            "due_date",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(ProjectCreateForm, self).__init__(*args, **kwargs)
+        self.fields['image'].required = False

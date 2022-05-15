@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block extrahead %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/projects.css' %}">
+{% endblock extrahead %}
+{% block content %}
+{% if user.username == object.user.user.username %}
+    <div class="project-actions">
+        <a href="{% url 'project-update' user.username object.id %}">Edit</a>
+        <a href="{% url 'project-delete' user.username object.id %}">Delete</a>
+    </div>
+{% endif %}
+<div class="project">
+    <h2>Project Info</h2>
+    <div class="project-info-attr">
+        <p class="attr-name">Name:</p>
+        <p class="attr-value">{{ object.name }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Type:</p>
+        <p class="attr-value">{{ object.project_type }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Field:</p>
+        <p class="attr-value">{{ object.field }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Keywords:</p>
+        <p class="attr-value">{{ object.keywords }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Description:</p>
+        <p class="attr-value">{{ object.description }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Status:</p>
+        <p class="attr-value">{{ object.status }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Created:</p>
+        <p class="attr-value">{{ object.creation_date }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">Due:</p>
+        <p class="attr-value">{{ object.due_date }}</p>
+    </div>
+    <div class="project-info-attr">
+        <p class="attr-name">By:</p>
+        <p class="attr-value">{{ object.user.user.username }}</p>
+    </div>
+    <div class="project-info-attr">
+        <img style='display:block; width:100px;height:100px;' id='base64image'
+        src="data:image/jpg;base64, {{ image }}"/>
+    </div>
+</div>
+{% endblock content %}

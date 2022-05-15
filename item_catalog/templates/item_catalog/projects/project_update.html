@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/projects.css' %}">
+{% endblock extrahead %}
+{% block content %}
+{% if not user.username == object.user.user.username %}
+    <p>You can only update your own projects!</p>
+{% else %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update">
+</form>
+{% endif %}
+{% endblock content %}
