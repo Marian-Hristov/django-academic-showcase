@@ -120,8 +120,12 @@ textarea {
 .post-actions a:hover{
     background: rgba(0, 0, 0, 0.315);
 }
-.like-button {
+.like-button, .flag-button  {
     font-size: 1.2rem;
     padding: 0.1rem;
     margin: 0.5rem 0 0.5rem 1rem;
+}
+
+.flag-button {
+    margin-left: 0;
 }
