@@ -19,9 +19,8 @@ Guilherme Correa - 2035536
 9. You're app is now running at localhost:8000 !
 
 Extra:
-For dummy data, run `python manage.py shell` from the root directory.
-
-Run `exec(open('setup/data_creation.py').read())`
+- For dummy data, run `python manage.py shell` from the root directory.
+- Then type the command `exec(open('setup/data_creation.py').read())` and run it
 
 ## The Project
 
@@ -67,9 +66,15 @@ If a user such a superuser is created and logged in through the admin page, they
 
 #### The purpose
 
-The purpose of this app was to provide a login and access control feature. The website has two types of users:
+  - Users should be able to send messages to other users.
+    - The user can also see their conversations with other users and themselves if they choose to send a message to themselves.
+    - When the user acceses their dashboard, if they have any messages, a message will be displayed in their dashboard.
 
 #### The pages of the app
+- send_message:
+    - Users here can choose a message recipient, enter their message body, and send the message. They are then redirected to view messages. They can also view their messages if they wish, without sending a message.
+- view_messages:
+    - Here users can view all of their messages. They can also choose to compose a new message which will redirect them to send_message.
 
 #### Screenshots
 
@@ -81,7 +86,7 @@ Messages, newest always at top:
 ![](image/README/1652658564040.png)
 
 #### Considerations
-- These message have nnew
+ - Accessing any of the message apps while not being logged in will simply redirect you to the dashboard.
 
 ---
 
