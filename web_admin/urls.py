@@ -9,5 +9,6 @@ urlpatterns = [
     path('block/<user_id>', views.toggle_block, name='toggle_block'),
     path('unflag_post/<post_id>', views.unflag_post, name='unflag_post'),
     path('profile_creation', views.create_profile, name='create_profile_popup'),
+    path('set_password/<user_id>', views.set_password, name='set_password'),
     path('<group_name>', views.render_dashboard, name='render_dashboard'),
 ]
