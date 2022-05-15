@@ -10,7 +10,7 @@ class ProfileCreationForm(forms.Form):
     email = forms.EmailField(label='Enter email')
     first_name = forms.CharField(label='Enter your first name', min_length=1, max_length=150)
     last_name  = forms.CharField(label='Enter your last name', min_length=1, max_length=150)
-    avatar = forms.ImageField(label='Choose an image for avatar (Ignore if you would like to set a default image)')
+    avatar = forms.ImageField(label='Choose an image for avatar')
     password1 = forms.CharField(label='Enter password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)
 
