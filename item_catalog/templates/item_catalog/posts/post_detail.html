@@ -69,7 +69,6 @@
                 </form>
             </div>
             <div class="project-info-attr">
-                {% comment %} ! need to change object.get_avrg_rating {% endcomment %}
                 <p>Average rating: {% if object.get_avrg_rating is null %}0{% else %}{{ object.get_avrg_rating }}{% endif %}/10</p>
                 <form action="{% url 'rate-post' object.id user.username %}" method="post">
                     {% csrf_token %}
