@@ -1,8 +1,6 @@
 from django import template
 register = template.Library()
 
-@register.filter()
+@register.filter(name='check_permission')
 def check_permission(user, permission):
-    if user.user_permissions.filter(codename = permission).exists():
-        return True
-    return False
+    return user.has_perm(permission)

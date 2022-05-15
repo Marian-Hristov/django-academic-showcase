@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tags %}
 {% load static %}
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/post.css' %}">
@@ -8,10 +9,11 @@
     <div class="title-container">
         <h1>{{ object.title }}</h1>
     </div>
-    {% if user.username == object.project.user.user.username %}
+    {% if user.username == object.project.user.user.username or user|check_permission:'item_catalog.administrate_projects' %}
     <div class="post-actions">
         <a href="{% url 'post-update' object.id %}">Edit</a>
         <a href="{% url 'post-delete' object.id %}">Delete</a>
+        <a href="{% url 'project-update' user.username object.project.id %}"> Edit Project </a>
     </div>
     {% endif %}
     <div class="project-info">

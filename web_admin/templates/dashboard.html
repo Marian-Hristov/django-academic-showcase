@@ -79,7 +79,7 @@
                         </a>
                         {% if selected_group.name == "Members" %}
                             <a href={{ "block/"|add:profile.user.username }}>
-                            {% if profile.user|check_permission:'can_interact' %}
+                            {% if profile.user|check_permission:'user_management.can_interact' %}
                                     Block
                             {% else %}
                                     Unblock
