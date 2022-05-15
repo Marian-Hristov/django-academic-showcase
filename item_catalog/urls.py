@@ -13,4 +13,6 @@ urlpatterns = [
     path('projects/create/<str:username>', views.ProjectCreateView.as_view(), name="project-create"),
     path('projects/personal/<str:username>/project/<int:pk>/update', views.ProjectUpdateView.as_view(), name="project-update"),
     path('projects/personal/<str:username>/project/<int:pk>/delete', views.ProjectDeleteView.as_view(), name="project-delete"),
+    path('flag/post/<int:pk>', views.flag_post, name="flag-post"),
+    path('post/<int:pk>/user/<str:username>/', views.rate_post, name="rate-post")
 ]

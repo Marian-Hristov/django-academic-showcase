@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tags %}
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/post.css' %}">
 {% endblock extrahead %}
 {% block content %}
-{% if not user.username == object.project.user.user.username %}
+{% if not user.username == object.project.user.user.username and not user|check_permission:'item_catalog.administrate_projects' %}
     <p>You can only delete your own posts!</p>
 {% else %}
 <form method="post">{% csrf_token %}

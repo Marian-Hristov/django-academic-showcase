@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 {% block extrahead %}
+{% load tags %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/projects.css' %}">
 {% endblock extrahead %}
 {% block content %}
-{% if user.username == object.user.user.username %}
+{% if user.username == object.user.user.username or user|check_permission:'administrate_projects' %}
     <div class="project-actions">
         <a href="{% url 'project-update' user.username object.id %}">Edit</a>
         <a href="{% url 'project-delete' user.username object.id %}">Delete</a>
+
     </div>
-{% endif %}
+    {% endif %}
 <div class="project">
-    <h2>Project Info</h2>
     <div class="project-info-attr">
-        <p class="attr-name">Name:</p>
+        <p class="attr-name">Namarsotinee:</p>
         <p class="attr-value">{{ object.name }}</p>
     </div>
     <div class="project-info-attr">

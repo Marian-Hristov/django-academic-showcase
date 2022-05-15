@@ -1,3 +1,4 @@
+from re import template
 from django import forms
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
@@ -5,6 +6,8 @@ from django.template import loader
 from django.contrib.auth.models import Group, User, Permission
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.forms import SetPasswordForm 
+from item_catalog.models import Post
 
 from user_management.forms import ProfileCreationForm
 from user_management.models import Profile
@@ -89,6 +92,21 @@ def create_profile(request):
     template = loader.get_template('popup.html')
     return HttpResponse(template.render({'form': f}, request))
 
+@permission_required(perm=['item_catalog.administrate_projects'], login_url="/user_management/login", raise_exception=True)
+def flagged_view(request):
+    flagged_posts = Post.objects.filter(flagged=True)
+    template = loader.get_template('flagged_posts.html')
+    return HttpResponse(template.render({'posts': flagged_posts}, request))
+
+@permission_required(perm=['auth.administrate_members'], login_url="/user_management/login", raise_exception=True)
+def unflag_post(request, post_id):
+    post: Post = Post.objects.get(id=post_id)
+    post.flagged = False
+    post.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+@permission_required(perm=['item_catalog.administrate_projects'], login_url="/user_management/login", raise_exception=True)
 def del_from_group(request, group_name, username):
     user: User = User.objects.get(username=username)
     Group.objects.get(name=group_name).user_set.remove(user)
@@ -97,3 +115,19 @@ def del_from_group(request, group_name, username):
         user.delete()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+@permission_required(perm=['item_catalog.administrate_projects'], login_url="/user_management/login", raise_exception=True)
+def set_password(request, user_id):
+    
+    user = User.objects.get(id=user_id)
+    template = loader.get_template('reset_password.html')
+    if request.method == "POST":
+        print(request.POST)
+        f = SetPasswordForm(user, request.POST)
+        if f.is_valid():
+            f.save()
+            return HttpResponse('<script type="text/javascript">window.close()</script>')  
+        else:
+            return HttpResponse(template.render({'form': f}, request))
+
+    return HttpResponse(template.render({'form': SetPasswordForm(user)}, request))

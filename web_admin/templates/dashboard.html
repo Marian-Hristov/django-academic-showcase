@@ -1,17 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-{% load static %}
+{% extends 'header.html' %}
 {% load tags %} 
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/web_admin.css' %}">
-    <title>Based</title>
-</head>
-
-<body>
+{% block content %}
     <script>
         window.onProfileAdded = () => {
             setTimeout(() => window.location.reload(), 1000);
@@ -23,7 +14,7 @@
             {% if group.name == selected_group.name %}
             <a href="{{ group.name }}" class="selected-group">
             {% else %}
-            <a href="{{ group.name }}"">
+            <a href="{{ group.name }}">
             {% endif %} 
                 <div class='group-container'> 
                     <h4> {{ group.name }} </h4>
@@ -69,27 +60,37 @@
                         </div>
                     </div>
                     <div class="bottom">
-                        {% if profile.user.groups.count > 1 %}
-                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="delete-from-group">
-                            Remove
-                        {% else %}
-                        <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="remove-from-django">
-                            Remove
-                        {% endif %}
-                        </a>
-                        {% if selected_group.name == "Members" %}
-                            <a href={{ "block/"|add:profile.user.username }}>
-                            {% if profile.user|check_permission:'can_interact' %}
-                                    Block
+                        <div class="first-row">
+                            {% if profile.user.groups.count > 1 %}
+                            <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="delete-from-group">
+                                Remove
                             {% else %}
-                                    Unblock
+                            <a href={{ "remove_from_group/"|add:selected_group.name|add:":"|add:profile.user.username }} class="remove-from-django">
+                                Remove
                             {% endif %}
                             </a>
+                            {% if selected_group.name == "Members" %}
+                                <a href={{ "block/"|add:profile.user.username }}>
+                                {% if profile.user|check_permission:'user_management.can_interact' %}
+                                        Block
+                                {% else %}
+                                        Unblock
+                                {% endif %}
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class='second-row'>
+                        {% if not profile.user|check_permission:'auth.administrate_members'%}
+                                <a href="{% url 'set_password' profile.user.id %}" target="_blank">
+                                    Reset Password
+                                </a>
                         {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
     </div>
-</body>
+
+{% endblock content %}

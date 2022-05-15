@@ -1,13 +1,9 @@
-from msilib.schema import ListView
-from urllib import request
-from xml.etree.ElementTree import Comment
 from django.http import Http404, HttpResponse, HttpResponseServerError
-from django.shortcuts import render
+from django.db import models
 from django.template import loader
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
 
 from django.views.generic import FormView
@@ -20,7 +16,7 @@ from django.views.generic.edit import DeleteView
 
 from item_catalog.forms import CommentForm, ProjectCreateForm
 
-from item_catalog.models import Post, Project
+from item_catalog.models import Post, Project, Rating
 from user_management.models import Profile
 
 # Create your views here.
@@ -76,6 +72,10 @@ class PostCreateView(CreateView):
         "project"
     ]
 
+    def form_valid(self, form):
+        form.instance.flagged = False
+        return super().form_valid(form)
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
@@ -127,6 +127,34 @@ class PostDetailView(DetailView):
             context['form'] = CommentForm()
         return context
 
+def flag_post(request, pk):
+    if request.method == "POST":
+        post = Post.objects.get(id=pk)
+        post.flagged = True
+        post.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        return Http404()
+
+def rate_post(request, pk, username):
+    if request.method == "POST":
+        post = Post.objects.get(id=pk)
+        user = User.objects.get(username=username)
+        profile = Profile.objects.get(user=user)
+        rating_value = request.POST.get('rating-value')
+        # if post exists, change it, if it doesn't, create a new one
+        try:
+            rating = get_object_or_404(Rating, post=post, user=profile)
+            rating.rating_value = rating_value
+            rating.save()
+        except Http404:
+            print("bruh")
+            rating = Rating(post=post, rating_value=rating_value, user=profile)
+            print(rating.rating_value)
+            rating.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        return Http404()
 
 class PostUpdateView(UpdateView):
     model = Post
@@ -156,7 +184,7 @@ class PostUpdateView(UpdateView):
 class PostDeleteView(DeleteView):
     model = Post
     template_name = "item_catalog/posts/post_delete.html"
-    success_url = reverse_lazy('item_catalog')
+    success_url = reverse_lazy('posts')
     redirect_authenticated_user = True
 
     def get(self, request, *args, **kwargs):
@@ -168,6 +196,7 @@ class PostDeleteView(DeleteView):
         if not self.request.user.is_authenticated:
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
+
 
 class ProjectListView(ListView):
     model = Project
@@ -192,7 +221,6 @@ class ProjectDetailView(DetailView):
         context["image"] = self.decode_image()
         return context
     
-
 
 class ProjectCreateView(CreateView):
     model = Project
