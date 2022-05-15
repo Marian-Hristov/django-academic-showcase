@@ -115,10 +115,15 @@ class PostDetailView(DetailView):
             return HttpResponseRedirect(reverse('redirect-to-login'))
         return None 
 
+    def decode_image(self):
+        post = self.get_object()
+        return bytes(post.project.image).decode()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             context['profile'] = get_object_or_404(Profile, user=self.request.user)
+            context['image'] = self.decode_image()
             context['form'] = CommentForm()
         return context
 
@@ -180,7 +185,6 @@ class ProjectDetailView(DetailView):
 
     def decode_image(self):
         project = self.get_object()
-        print(project)
         return bytes(project.image).decode()
 
     def get_context_data(self, **kwargs):
