@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% extends 'header.html' %}
+{% load tags %} 
+
+{% block content%}
+    <div class='grid-container'>
+        <div class='user-card-area'>
+            {% if posts.count == 0%} 
+            <p> There are no flagged posts. </p>
+            {% endif %}
+            {% for post in posts %}
+            <div class='user-card-container'>
+                <div class="top">
+                    <div class="right post">
+                        <p> Title: {{ post.title }} </p>
+                        <p> Owner: {{ post.project.user }} </p>
+                        <p> Likes: {{ post.get_number_of_likes }} </p>
+                        <a href={% url 'post-detail' post.id %}>Link to post </a>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <a href="{% url 'post-delete' post.id %}" class="delete-from-group">
+                        Remove
+                    </a>
+                    <a href="{% url 'unflag_post' post.id %}" class="delete-from-group">
+                       Unflag 
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content%}

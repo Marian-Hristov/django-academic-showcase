@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap');
-
 * {
     box-sizing: border-box;
 }
@@ -8,11 +7,24 @@ body {
     background-color: #E4E4ED;
 }
 
+.header {
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    background-color: #07031171;
+}
+
+.header a {
+    padding: 10px;
+    background-color: #ffffff19;
+    margin: 0 10px;
+    color: rgb(0, 0, 0);
+}
+
 .grid-container {
     display: grid;
     grid-template-columns: 25fr 75fr;
 }
-
 
 .group-selection-container {
     display: flex;
@@ -20,14 +32,13 @@ body {
     padding: 20px 20px;
     width: 100%;
     background: #FFFFFF38;
-
     gap: 10px;
     /* margin-top: 20px; */
     height: min-content;
     border-radius: 10px;
 }
 
-.group-selection-container a{
+.group-selection-container a {
     text-decoration: none;
     color: black;
 }
@@ -53,7 +64,7 @@ body {
     box-shadow: 0px 6px 6px 0px #00000018;
 }
 
-.group-container h4{
+.group-container h4 {
     margin: 0;
     font-family: 'Inter';
 }
@@ -69,7 +80,7 @@ body {
     max-width: 10%;
 }
 
-.-options form{
+.-options form {
     margin-top: 10px;
     display: flex;
 }
@@ -90,13 +101,11 @@ body {
     width: 267px;
     max-width: 267px;
     min-height: 150px;
-
     flex-direction: column;
     background-color: white;
     border-radius: 25px;
     justify-content: center;
     box-shadow: 0px 6px 6px 0px #00000018;
-
     margin: 10px 5px;
     padding: 1em 2em;
 }
@@ -106,13 +115,13 @@ body {
     display: flex;
 }
 
-.user-card-container .top img{
+.user-card-container .top img {
     width: 50px;
     height: 50px;
     border-radius: 10px;
 }
 
-.user-card-container .top .left{
+.user-card-container .top .left {
     /* background-color: blue; */
     /* padding-top: 25px; */
 }
@@ -125,13 +134,20 @@ body {
     max-width: 80%;
 }
 
+.user-card-container .top .post {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+}
+
 .user-card-container .top .right p {
     margin-top: 0px;
     line-height: 1.25;
     margin-bottom: 0;
     font-family: 'Inter';
     color: rgb(0, 0, 0);
-
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -163,28 +179,25 @@ body {
     text-align: center;
     border-radius: 5%;
     padding: 4px 0;
-
     text-decoration: none;
     color: black;
-
     /* background: #FF000036; */
     background: #aa90901e;
     font-family: 'Inter';
     font-weight: 300;
-    transition: background-color 0.2s linear,
-                color 0.2s linear;
+    transition: background-color 0.2s linear, color 0.2s linear;
 }
 
 .user-card-container .bottom a.remove-from-django {
     /* background: #aa00001e; */
 }
 
-.user-card-container .bottom a:hover{
+.user-card-container .bottom a:hover {
     background: #311675fd;
     color: white;
 }
 
-.user-card-container .bottom a.remove-from-django:hover{
+.user-card-container .bottom a.remove-from-django:hover {
     background: #ff0000f3;
     color: white;
 }

@@ -1,17 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-{% load static %}
+{% extends 'header.html' %}
 {% load tags %} 
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/web_admin.css' %}">
-    <title>Based</title>
-</head>
-
-<body>
+{% block content %}
     <script>
         window.onProfileAdded = () => {
             setTimeout(() => window.location.reload(), 1000);
@@ -23,7 +14,7 @@
             {% if group.name == selected_group.name %}
             <a href="{{ group.name }}" class="selected-group">
             {% else %}
-            <a href="{{ group.name }}"">
+            <a href="{{ group.name }}">
             {% endif %} 
                 <div class='group-container'> 
                     <h4> {{ group.name }} </h4>
@@ -92,4 +83,5 @@
             </div>
         </div>
     </div>
-</body>
+
+{% endblock content %}

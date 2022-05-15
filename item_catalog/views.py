@@ -162,7 +162,7 @@ class PostUpdateView(UpdateView):
 class PostDeleteView(DeleteView):
     model = Post
     template_name = "item_catalog/posts/post_delete.html"
-    success_url = reverse_lazy('item_catalog')
+    success_url = reverse_lazy('posts')
     redirect_authenticated_user = True
 
     def get(self, request, *args, **kwargs):
