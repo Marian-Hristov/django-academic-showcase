@@ -19,7 +19,7 @@ from django.views.generic.edit import DeleteView
 
 from item_catalog.forms import CommentForm, ProjectCreateForm
 
-from item_catalog.models import Post, Project
+from item_catalog.models import Post, Project, Rating
 from user_management.models import Profile
 
 # Create your views here.
@@ -131,11 +131,33 @@ class PostDetailView(DetailView):
         return context
 
 def flag_post(request, pk):
-    post = Post.objects.get(id=pk)
-    post.flagged = True
-    post.save()
+    if request.method == "POST":
+        post = Post.objects.get(id=pk)
+        post.flagged = True
+        post.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        return Http404()
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+def rate_post(request, pk, username):
+    if request.method == "POST":
+        post = Post.objects.get(id=pk)
+        user = User.objects.get(username=username)
+        profile = Profile.objects.get(user=user)
+        rating_value = request.POST.get('rating-value')
+        # if post exists, change it, if it doesn't, create a new one
+        try:
+            rating = get_object_or_404(Rating, post=post, user=profile)
+            rating.rating_value = rating_value
+            rating.save()
+        except Http404:
+            print("bruh")
+            rating = Rating(post=post, rating_value=rating_value, user=profile)
+            print(rating.rating_value)
+            rating.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    else:
+        return Http404()
 
 class PostUpdateView(UpdateView):
     model = Post

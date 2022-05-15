@@ -32,11 +32,6 @@ def get_def_proj_avatar():
         return base64.b64encode(img_file.read())
 
 
-class Rating(models.Model):
-    rating_value = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False, blank=False)
-
-
 class Project(models.Model):
     name = models.CharField(max_length=75)
     project_type = models.CharField(max_length=40)
@@ -61,10 +56,9 @@ class Project(models.Model):
 class Post(models.Model):
 
     def __get_zero():
-        return [0]
+        return 0
 
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    ratings = models.ManyToManyField(Rating, related_name="post_rating", default=__get_zero(), blank=True)
     title = models.CharField(max_length=100,validators=[empty_string_validation])
     flagged = models.BooleanField(default=False)
     likes = models.ManyToManyField(Profile, related_name="post_like", default=__get_zero(), blank=True,)
@@ -74,12 +68,14 @@ class Post(models.Model):
 
     def get_number_of_likes(self):
         return self.likes.count()
-
-    def get_avrg_rating(self):
-        return self.ratings.aggregate(models.Avg("rating_value"))
     
     def user_has_liked(self, user):
         return self.likes.all()
+
+    def get_avrg_rating(self):
+        rating = Rating.objects.filter(post=self).aggregate(models.Avg('rating_value'))
+        print(f"avg: {rating}")
+        return rating['rating_value__avg']
 
 
 class Comment(models.Model):
@@ -93,3 +89,9 @@ class Comment(models.Model):
 
     def get_comments(self):
         return Comment.objects.filter(parent=self)
+
+
+class Rating(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=False, blank=False)
+    rating_value = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)])
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=False, blank=False)
