@@ -1,3 +1,4 @@
+from re import template
 from django import forms
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
@@ -5,6 +6,7 @@ from django.template import loader
 from django.contrib.auth.models import Group, User, Permission
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.contenttypes.models import ContentType
+from item_catalog.models import Post
 
 from user_management.forms import ProfileCreationForm
 from user_management.models import Profile
@@ -88,6 +90,20 @@ def create_profile(request):
         f = ProfileCreationForm()
     template = loader.get_template('popup.html')
     return HttpResponse(template.render({'form': f}, request))
+
+@permission_required(perm=['item_catalog.administrate_projects'], login_url="/user_management/login", raise_exception=True)
+def flagged_view(request):
+    flagged_posts = Post.objects.filter(flagged=True)
+    template = loader.get_template('flagged_posts.html')
+    return HttpResponse(template.render({'posts': flagged_posts}, request))
+
+@permission_required(perm=['item_catalog.administrate_projects'], login_url="/user_management/login", raise_exception=True)
+def unflag_post(request, post_id):
+    post: Post = Post.objects.get(id=post_id)
+    post.flagged = False
+    post.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
 
 def del_from_group(request, group_name, username):
     user: User = User.objects.get(username=username)
