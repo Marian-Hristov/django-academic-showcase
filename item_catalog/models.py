@@ -76,7 +76,7 @@ class Post(models.Model):
         return self.likes.count()
 
     def get_avrg_rating(self):
-        return self.ratings.aggregate(Avg("rating_value"))
+        return self.ratings.aggregate(models.Avg("rating_value"))
     
     def user_has_liked(self, user):
         return self.likes.all()

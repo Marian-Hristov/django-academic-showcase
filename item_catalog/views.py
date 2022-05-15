@@ -1,3 +1,4 @@
+from ast import operator
 from django.http import Http404, HttpResponse, HttpResponseServerError
 from django.db import models
 from django.template import loader
@@ -5,6 +6,8 @@ from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
+from functools import reduce
+import operator
 
 from django.views.generic import FormView
 from django.views.generic.list import ListView
@@ -286,11 +289,16 @@ class PostListView(ListView):
 
     def get_queryset(self):
         search = self.request.GET.get('search', None)
-        original_qs = super().get_queryset() 
+        original_qs = super().get_queryset()
+        project_fields = ["name", "project_type", "field", "keywords", "description", "status"]
+        query_list = []
+        #
+        [query_list.append(models.Q(**{f"project__{field}__icontains": search})) for field in project_fields ]
+        query_list.append(models.Q(**{"title__icontains": search}))
         if search is None:
             # original qs
             print('no search')
             return original_qs
         else:
             print(f'search for {search}')
-            return original_qs.filter(title__icontains=search)
+            return original_qs.filter(reduce(operator.or_, query_list)).distinct()
