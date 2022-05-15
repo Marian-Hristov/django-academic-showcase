@@ -136,6 +136,12 @@
     border-radius: 10px;
 }
 
+.search-container input[type="hidden"] {
+    padding: 0;
+    height: 0;
+    width: 0;
+}
+
 .searchbar-container input::placeholder {
     color: black;
 }

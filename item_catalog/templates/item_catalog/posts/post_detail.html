@@ -66,7 +66,7 @@
                 <form action="{% url 'flag-post' object.id %}" method="post">
                     {% csrf_token %}
                     <button class="flag-button" onclick="alert('The post has been flagged')" type="submit">Flag post</button>
-                    </form>
+                </form>
             </div>
             <div class="project-like-container">
                 {% if profile in object.likes.all %}
