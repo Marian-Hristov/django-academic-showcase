@@ -24,7 +24,7 @@ def send_message(request):
                 )
                 new_message.save()
 
-                return redirect('../view_messages')
+                return redirect('view-messages')
         else:
             f = MessagingForm()
         return render(request, "user_messaging/send_messages.html", {'form': f})

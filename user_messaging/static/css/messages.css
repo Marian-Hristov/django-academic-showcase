@@ -1,0 +1,56 @@
+.content {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.user-images {
+    height: 2rem;
+    width: 2rem;
+}
+
+.send-message {
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: 0.2s ease-in-out;
+    margin-bottom: 1rem;
+}
+
+.send-message:hover {
+    font-size: 1.7rem;
+}
+
+.messages {
+    display: flex;
+    flex-flow: column nowrap;
+    overflow-y: visible;
+}
+
+.message-container {
+    padding: 1rem;
+    width: 100%;
+    background: white;
+    margin-bottom: 1rem;
+}
+
+.users-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message-sender, .message-receiver {
+    display: flex;
+    flex-direction: row;
+}
+
+.message-receiver {
+    flex-direction: row-reverse;
+}
+
+.message-body {
+    font-size: 1.2rem;
+    padding: 1rem 0;
+}
+
+.message-date {
+    font-size: 0.9rem;
+}
