@@ -35,7 +35,7 @@ def view_messages(request):
     if request.user.is_authenticated:
         context = {'messages': None, 'has_msg': True}
         users_messages = []
-        for msg in Message.objects.all():
+        for msg in Message.objects.all().order_by("-send_date"):
             if msg.sender.user.username == request.user.username or msg.receiver.user.username == request.user.username:
                 if msg.receiver.user.username == request.user.username:
                     Message.objects.filter(pk=msg.pk).update(read_receiver=True)
