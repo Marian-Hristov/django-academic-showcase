@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load tags %}
 {% load static %}
 {% block content %}
-{% if not user.username == object.user.user.username %}
+{% if not user.username == object.user.user.username and not user|check_permission:'item_catalog.administrate_projects' %}
     <p>You can only delete your own projects!</p>
 {% else %}
 <form method="post">{% csrf_token %}
